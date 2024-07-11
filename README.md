@@ -28,9 +28,9 @@ This topic refers to all the technologies used in the project and the steps to b
 
 ### US's - MPV
 
-- 🚧 [US000] Configure Repository
+- ✅ [US000] Configure Repository
   - ✅ [US000-1] Implements a README
-  - 🚧 [US000-2] Configure GitHub Actions
+  - ✅ [US000-2] Configure GitHub Actions
 - 🚧 [US001] Configure Project
   - 🚧 [US001-1] Create a Postgres Container
   - 🚧 [US001-2] Configure JPA
@@ -38,21 +38,21 @@ This topic refers to all the technologies used in the project and the steps to b
   - 🚧 [US002-1] Create User Entity
   - 🚧 [US002-2] Create Agenda Entity
   - 🚧 [US002-3] Create Log Entity
-- 🚧 [US003] Implement Log Population
-  - 🚧 [US003-1] Create Request and Response Log DTO 
-  - 🚧 [US003-2] Implement Methods Related to User
-  - 🚧 [US003-3] Implement Methods Related to Agenda
-- 🚧 [US004] User Flow
-  - 🚧 [US004-1] Create Request and Response User DTO  
-  - 🚧 [US004-2] Create User
-  - 🚧 [US004-3] Implement Random CPF Treatment (Valid/Invalid)
-  - 🚧 [US004-4] Implement Random if User is allowed to vote
-  - 🚧 [US004-5] Implement Login Feature
-- 🚧 [US005] Agenda Flow
-  - 🚧 [US005-1] Create Request and Response Agenda DTO 
-  - 🚧 [US005-2] Create Agenda
-  - 🚧 [US005-3] Implements Agenda Start, Duration and End
-  - 🚧 [US005-4] Implement User Vote in Agenda
+- 🚧 [US003] User Flow
+  - 🚧 [US003-1] Create Request and Response User DTO  
+  - 🚧 [US003-2] Create User
+  - 🚧 [US003-3] Implement Random CPF Treatment (Valid/Invalid)
+  - 🚧 [US003-4] Implement Random if User is allowed to vote
+  - 🚧 [US003-5] Implement Login Feature
+- 🚧 [US004] Agenda Flow
+  - 🚧 [US004-1] Create Request and Response Agenda DTO 
+  - 🚧 [US004-2] Create Agenda
+  - 🚧 [US004-3] Implements Agenda Start, Duration and End
+  - 🚧 [US004-4] Implement User Vote in Agenda
+- 🚧 [US005] Implement Log Population
+  - 🚧 [US005-1] Create Request and Response Log DTO 
+  - 🚧 [US005-2] Implement Methods Related to User
+  - 🚧 [US005-3] Implement Methods Related to Agenda
 - 🚧 [US006] Error Treatment
   - 🚧 [US006-1] Implement ErrorHandlers that are Related to User
   - 🚧 [US006-2] Implement ErrorHandlers that are Related to Agenda
