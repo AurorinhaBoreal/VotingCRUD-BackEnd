@@ -1,0 +1,29 @@
+name: Build and Test Software
+run-name: ${{ github.actor }} pushed new Changes...
+on: [push]
+jobs:
+  Project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Up Project
+        uses: actions/checkout@v3
+
+      - name: Set Up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: gradle
+          
+      - name: Run Project
+        run: ./gradlew build --no-daemon
+      
+      - name: Run Tests
+        run: ./gradlew test
+        
+      - name: Sonarlint Results
+        uses: jwgmeligmeyling/spotbugs-github-action@v1.2
+        with:
+          name: Sonarlint
+          title: Sonarlint Report
+          path: build/reports/sonarlint/*.xml
