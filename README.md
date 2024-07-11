@@ -68,6 +68,7 @@ This topic refers to all the technologies used in the project and the steps to b
   - 🚧 [US00X-1] Integration Tests - Happy
   - 🚧 [US00X-2] Integration Tests - Sad
   - 🚧 [US00X-3] Performance Tests 
+  - 🚧 [US00X-4] Swagger Customization
 
 
 ## License
