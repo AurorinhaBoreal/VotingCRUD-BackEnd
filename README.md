@@ -21,7 +21,9 @@ This topic refers to all the technologies used in the project and the steps to b
 
 - ☕ Java
 - 🍃 Spring Boot
-    - Spring Boot JPA
+    - 📦 Spring Boot JPA
+- 🌶️ Lombok
+- 🧪 JUnit 5
 - 🐘 PostgreSQL
 
 ### US's - MPV
@@ -37,19 +39,35 @@ This topic refers to all the technologies used in the project and the steps to b
   - 🚧 [US002-2] Create Agenda Entity
   - 🚧 [US002-3] Create Log Entity
 - 🚧 [US003] Implement Log Population
-  - 🚧 [US004-1] Implement Methods Related to User
-  - 🚧 [US004-1] Implement Methods Related to Agenda
+  - 🚧 [US003-1] Create Request and Response Log DTO 
+  - 🚧 [US003-2] Implement Methods Related to User
+  - 🚧 [US003-3] Implement Methods Related to Agenda
 - 🚧 [US004] User Flow
-  - 🚧 [US004.1] Create User and Insert in Log
-  - 🚧 [US004-2] Implement Login Feature
+  - 🚧 [US004-1] Create Request and Response User DTO  
+  - 🚧 [US004-2] Create User
+  - 🚧 [US004-3] Implement Random CPF Treatment (Valid/Invalid)
+  - 🚧 [US004-4] Implement Random if User is allowed to vote
+  - 🚧 [US004-5] Implement Login Feature
 - 🚧 [US005] Agenda Flow
-  - 🚧 [US005-1] Create Agenda and Insert in Log
-  - 🚧 [US005-2] Implements Agenda Start, Duration and End
-  - 🚧 [US005-3] Implement User Vote in Agenda
-  - 
+  - 🚧 [US005-1] Create Request and Response Agenda DTO 
+  - 🚧 [US005-2] Create Agenda
+  - 🚧 [US005-3] Implements Agenda Start, Duration and End
+  - 🚧 [US005-4] Implement User Vote in Agenda
+- 🚧 [US006] Error Treatment
+  - 🚧 [US006-1] Implement ErrorHandlers that are Related to User
+  - 🚧 [US006-2] Implement ErrorHandlers that are Related to Agenda
+  - 🚧 [US006-3] Implement ErrorHandlers that are Related to Log
+- 🚧 [US007] Test Implementation
+  - 🚧 [US007-1] Unitary Tests - Happy
+  - 🚧 [US007-2] Unitary Tests - Sad
 
 ### US's - Extra
 
+- 🚧 [US00X] Related to Extra Features
+  - 🚧 [US00X-1] Swagger Implementation
+  - 🚧 [US00X-3] Integration Tests - Happy
+  - 🚧 [US00X-4] Integration Tests - Sad
+  - 🚧 [US00X-5] Performance Tests 
 
 
 ## License
