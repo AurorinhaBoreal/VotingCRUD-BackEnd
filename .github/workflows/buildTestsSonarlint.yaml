@@ -1,6 +1,8 @@
 name: Build and Test Software
 run-name: ${{ github.actor }} pushed new Changes...
-on: [push]
+
+on: [push, pull_request]
+
 jobs:
   Project:
     runs-on: ubuntu-latest
