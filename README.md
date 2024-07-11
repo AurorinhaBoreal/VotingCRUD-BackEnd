@@ -31,9 +31,10 @@ This topic refers to all the technologies used in the project and the steps to b
 - ✅ [US000] Configure Repository
   - ✅ [US000-1] Implements a README
   - ✅ [US000-2] Configure GitHub Actions
-- 🚧 [US001] Configure Project
-  - 🚧 [US001-1] Create a Postgres Container
-  - 🚧 [US001-2] Configure JPA
+- ✅ [US001] Configure Project
+  - ✅ [US001-1] Create a Postgres Container
+  - ✅ [US001-2] Configure JPA
+  - ✅ [US001-3] Swagger Implementation
 - 🚧 [US002-1] Create Database
   - 🚧 [US002-1] Create User Entity
   - 🚧 [US002-2] Create Agenda Entity
@@ -64,10 +65,10 @@ This topic refers to all the technologies used in the project and the steps to b
 ### US's - Extra
 
 - 🚧 [US00X] Related to Extra Features
-  - 🚧 [US00X-1] Swagger Implementation
-  - 🚧 [US00X-3] Integration Tests - Happy
-  - 🚧 [US00X-4] Integration Tests - Sad
-  - 🚧 [US00X-5] Performance Tests 
+  - 🚧 [US00X-1] Integration Tests - Happy
+  - 🚧 [US00X-2] Integration Tests - Sad
+  - 🚧 [US00X-3] Performance Tests 
+  - 🚧 [US00X-4] Swagger Customization
 
 
 ## License
