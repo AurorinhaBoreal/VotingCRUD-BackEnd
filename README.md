@@ -35,10 +35,10 @@ This topic refers to all the technologies used in the project and the steps to b
   - ✅ [US001-1] Create a Postgres Container
   - ✅ [US001-2] Configure JPA
   - ✅ [US001-3] Swagger Implementation
-- 🚧 [US002-1] Create Database
-  - 🚧 [US002-1] Create User Entity
-  - 🚧 [US002-2] Create Agenda Entity
-  - 🚧 [US002-3] Create Log Entity
+- ✅ [US002] Create Database
+  - ✅ [US002-1] Create User Entity
+  - ✅ [US002-2] Create Agenda Entity
+  - ✅ [US002-3] Create Log Entity
 - 🚧 [US003] User Flow
   - 🚧 [US003-1] Create Request and Response User DTO  
   - 🚧 [US003-2] Create User
