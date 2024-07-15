@@ -17,7 +17,7 @@ public interface UserMapper {
                 .build();
     }
 
-    static User dtoToStudent(UserRegisterRequest userDTO) {
+    static User dtoToUser(UserRegisterRequest userDTO) {
         return User.builder()
                 .userType(userDTO.userType())
                 .firstName(userDTO.firstName())

@@ -11,13 +11,17 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "tbl_user")
 public class User {
 
@@ -43,6 +47,6 @@ public class User {
     private String password;
 
     @Column(name = "creation_date")
-    private LocalDate createdOn = LocalDate.now();
+    private final LocalDate createdOn = LocalDate.now();
 
 }
