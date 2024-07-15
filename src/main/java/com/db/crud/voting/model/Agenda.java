@@ -11,7 +11,17 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "tbl_agenda")
 public class Agenda {
 
@@ -23,27 +33,29 @@ public class Agenda {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @Column(length = 20)
-    private String title;
-
     @Column(length = 200)
     private String question;
 
     @Column(name = "yes_votes")
-    private Integer yesVotes;
+    @Builder.Default
+    private Integer yesVotes = 0;
 
     @Column(name = "no_votes")
-    private Integer noVotes;
+    @Builder.Default
+    private Integer noVotes = 0;
 
     @Column(name = "total_votes")
-    private Integer totalVotes;
+    @Builder.Default
+    private Integer totalVotes = 0;
 
     @Column(name = "duration_minutes")
-    private Integer duration;
+    @Builder.Default
+    private Integer duration = 1;
 
     @Column(name = "agenda_ended")
-    private boolean hasEnded;
+    @Builder.Default
+    private boolean hasEnded = false;
 
     @Column(name = "creation_date")
-    private LocalDate createdOn = LocalDate.now();
+    private final LocalDate createdOn = LocalDate.now();
 }
