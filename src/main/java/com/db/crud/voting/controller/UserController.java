@@ -8,6 +8,8 @@ import com.db.crud.voting.dto.request.UserRegisterRequest;
 import com.db.crud.voting.dto.response.UserResponse;
 import com.db.crud.voting.service.user.UserService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +35,7 @@ public class UserController {
     }
     
     @PostMapping("/create")
-    public ResponseEntity<UserResponse> register(@RequestBody UserRegisterRequest userRegisterRequest) {
+    public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
         var body = userService.register(userRegisterRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
