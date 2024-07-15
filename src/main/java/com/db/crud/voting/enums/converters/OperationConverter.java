@@ -1,4 +1,4 @@
-package com.db.crud.voting.dto;
+package com.db.crud.voting.enums.converters;
 
 import java.util.stream.Stream;
 
