@@ -28,30 +28,31 @@ This topic refers to all the technologies used in the project and the steps to b
 
 ### US's - MPV
 
-- ✅ [US000] Configure Repository
+- 🚧 [US000] Configure Repository
   - ✅ [US000-1] Implements a README
-  - ✅ [US000-2] Configure GitHub Actions
-- ✅ [US001] Configure Project
-  - ✅ [US001-1] Create a Postgres Container
-  - ✅ [US001-2] Configure JPA
-  - ✅ [US001-3] Swagger Implementation
-- ✅ [US002] Create Database
-  - ✅ [US002-1] Create User Entity
-  - ✅ [US002-2] Create Agenda Entity
-  - ✅ [US002-3] Create Log Entity
-- ✅ [US003] User Flow
-  - ✅ [US003-1] Create Request and Response User DTO  
-  - ✅ [US003-2] Create User
-  - ✅ [US003-3] Implement Login Feature
-- 🚧 [US004] Agenda Flow
-  - 🚧 [US004-1] Create Request and Response Agenda DTO 
-  - 🚧 [US004-2] Create Agenda
-  - 🚧 [US004-3] Implements Agenda Start, Duration and End
-  - 🚧 [US004-4] Implement User Vote in Agenda
-- 🚧 [US005] Implement Log Population
-  - 🚧 [US005-1] Create Request and Response Log DTO 
-  - 🚧 [US005-2] Implement Methods Related to User
-  - 🚧 [US005-3] Implement Methods Related to Agenda
+  - 🚧 [US000-2] Configure GitHub Actions
+- 🚧 [US001] Configure Project
+  - 🚧 [US001-1] Create a Postgres Container
+  - 🚧 [US001-2] Configure JPA
+- 🚧 [US002-1] Create Database
+  - 🚧 [US002-1] Create User Entity
+  - 🚧 [US002-2] Create Agenda Entity
+  - 🚧 [US002-3] Create Log Entity
+- 🚧 [US003] Implement Log Population
+  - 🚧 [US003-1] Create Request and Response Log DTO 
+  - 🚧 [US003-2] Implement Methods Related to User
+  - 🚧 [US003-3] Implement Methods Related to Agenda
+- 🚧 [US004] User Flow
+  - 🚧 [US004-1] Create Request and Response User DTO  
+  - 🚧 [US004-2] Create User
+  - 🚧 [US004-3] Implement Random CPF Treatment (Valid/Invalid)
+  - 🚧 [US004-4] Implement Random if User is allowed to vote
+  - 🚧 [US004-5] Implement Login Feature
+- 🚧 [US005] Agenda Flow
+  - 🚧 [US005-1] Create Request and Response Agenda DTO 
+  - 🚧 [US005-2] Create Agenda
+  - 🚧 [US005-3] Implements Agenda Start, Duration and End
+  - 🚧 [US005-4] Implement User Vote in Agenda
 - 🚧 [US006] Error Treatment
   - 🚧 [US006-1] Implement ErrorHandlers that are Related to User
   - 🚧 [US006-2] Implement ErrorHandlers that are Related to Agenda
@@ -63,10 +64,10 @@ This topic refers to all the technologies used in the project and the steps to b
 ### US's - Extra
 
 - 🚧 [US00X] Related to Extra Features
-  - 🚧 [US00X-1] Integration Tests - Happy
-  - 🚧 [US00X-2] Integration Tests - Sad
-  - 🚧 [US00X-3] Performance Tests 
-  - 🚧 [US00X-4] Swagger Customization
+  - 🚧 [US00X-1] Swagger Implementation
+  - 🚧 [US00X-3] Integration Tests - Happy
+  - 🚧 [US00X-4] Integration Tests - Sad
+  - 🚧 [US00X-5] Performance Tests 
 
 
 ## License
