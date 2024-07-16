@@ -48,10 +48,10 @@ This topic refers to all the technologies used in the project and the steps to b
   - ✅ [US004-2] Create Agenda
   - ✅ [US004-3] Implements Agenda Start, Duration and End
   - ✅ [US004-4] Implement User Vote in Agenda
-- 🚧 [US005] Implement Log Population
-  - 🚧 [US005-1] Create Request and Response Log DTO 
-  - 🚧 [US005-2] Implement Methods Related to User
-  - 🚧 [US005-3] Implement Methods Related to Agenda
+- ✅ [US005] Implement Log Population
+  - ✅ [US005-1] Create Response Log DTO and Mapper
+  - ✅ [US005-2] Implement Methods Related to User
+  - ✅ [US005-3] Implement Methods Related to Agenda
 - 🚧 [US006] Error Treatment
   - 🚧 [US006-1] Implement ErrorHandlers that are Related to User
   - 🚧 [US006-2] Implement ErrorHandlers that are Related to Agenda

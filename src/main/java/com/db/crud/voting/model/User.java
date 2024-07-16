@@ -1,6 +1,6 @@
 package com.db.crud.voting.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.db.crud.voting.enums.UserType;
 
@@ -47,6 +47,9 @@ public class User {
     private String password;
 
     @Column(name = "creation_date")
-    private final LocalDate createdOn = LocalDate.now();
+    private final LocalDateTime createdOn = LocalDateTime.now();
 
+    public String getFullname() {
+        return this.getFirstName()+" "+this.getSurname();
+    }
 }

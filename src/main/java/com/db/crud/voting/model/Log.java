@@ -1,6 +1,6 @@
 package com.db.crud.voting.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.db.crud.voting.enums.Operation;
 
@@ -11,7 +11,17 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "tbl_log")
 public class Log {
 
@@ -33,5 +43,6 @@ public class Log {
     private Operation operation;
 
     @Column(nullable = false)
-    private LocalDate realizedOn = LocalDate.now();
+    @Builder.Default
+    private LocalDateTime realizedOn = LocalDateTime.now();
 }

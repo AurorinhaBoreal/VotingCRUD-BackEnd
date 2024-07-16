@@ -1,7 +1,9 @@
 package com.db.crud.voting.service.agenda;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
@@ -15,24 +17,37 @@ import com.db.crud.voting.model.Agenda;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.AgendaRepository;
 import com.db.crud.voting.repository.UserRepository;
+import com.db.crud.voting.service.logs.LogService;
 
 @Service
 public class AgendaServiceImpl implements AgendaService {
     
     AgendaRepository agendaRepository;
     UserRepository userRepository;
+    LogService logService;
 
-    public AgendaServiceImpl(AgendaRepository agendaRepository, UserRepository userRepository) {
+    public AgendaServiceImpl(AgendaRepository agendaRepository, UserRepository userRepository, LogService logService) {
         this.agendaRepository = agendaRepository;
+        this.logService = logService;
         this.userRepository = userRepository;
     }
 
-    public List<Agenda> getEndedAgendas() {
-        return agendaRepository.findByHasEnded(false);
+    public List<AgendaResponse> getEndedAgendas() {
+        List<AgendaResponse> agendaResponse = new ArrayList<>();
+        List<Agenda> agendas = agendaRepository.findByHasEnded(false);
+        agendas.forEach(agenda -> 
+            agendaResponse.add(AgendaMapper.agendaToDto(agenda))
+        );
+        return agendaResponse;
     }
 
-    public List<Agenda> getActiveAgendas() {
-        return agendaRepository.findByHasEnded(true);
+    public List<AgendaResponse> getActiveAgendas() {
+        List<AgendaResponse> agendaResponse = new ArrayList<>();
+        List<Agenda> agendas = agendaRepository.findByHasEnded(true);
+        agendas.forEach(agenda -> 
+            agendaResponse.add(AgendaMapper.agendaToDto(agenda))
+        );
+        return agendaResponse;
     }
 
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
@@ -42,6 +57,7 @@ public class AgendaServiceImpl implements AgendaService {
         }
         Agenda agendaCreated = AgendaMapper.dtoToAgenda(agendaRequest);
         agendaRepository.save(agendaCreated);
+        logService.addLog("Agenda", agendaCreated.getId(), agendaCreated.getQuestion(), "C", agendaCreated.getCreatedOn());
         return AgendaMapper.agendaToDto(agendaCreated);
     }
 
@@ -61,6 +77,7 @@ public class AgendaServiceImpl implements AgendaService {
             agenda.setNoVotes(nVotes+1);
         }
         agendaRepository.save(agenda);
+        logService.addLog("User", user.getId(), user.getFullname(), "V", LocalDateTime.now());
         return VoteMapper.voteToDto(true, user.getCpf());
     }
 }

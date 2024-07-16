@@ -7,7 +7,6 @@ import com.db.crud.voting.dto.request.AddVoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.response.AddVoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
-import com.db.crud.voting.model.Agenda;
 import com.db.crud.voting.service.agenda.AgendaService;
 
 import jakarta.validation.Valid;
@@ -32,13 +31,13 @@ public class AgendaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Agenda>> getEndedAgendas() {
+    public ResponseEntity<List<AgendaResponse>> getEndedAgendas() {
         var body = agendaService.getEndedAgendas();
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }
     
     @GetMapping("/active")
-    public ResponseEntity<List<Agenda>> getActiveAgendas() {
+    public ResponseEntity<List<AgendaResponse>> getActiveAgendas() {
         var body = agendaService.getActiveAgendas();
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }

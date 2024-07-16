@@ -2,12 +2,15 @@ package com.db.crud.voting.enums.converters;
 
 import java.util.stream.Stream;
 
+import org.springframework.stereotype.Component;
+
 import com.db.crud.voting.enums.UserType;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter(autoApply = true)
+@Component
 public class UserTypeConverter implements AttributeConverter<UserType, String> {
 
     @Override

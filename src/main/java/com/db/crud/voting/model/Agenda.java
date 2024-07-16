@@ -1,6 +1,6 @@
 package com.db.crud.voting.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,5 +65,5 @@ public class Agenda {
     private boolean hasEnded = false;
 
     @Column(name = "creation_date")
-    private final LocalDate createdOn = LocalDate.now();
+    private final LocalDateTime createdOn = LocalDateTime.now();
 }
