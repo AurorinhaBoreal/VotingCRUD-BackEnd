@@ -13,6 +13,9 @@ import com.db.crud.voting.dto.request.AddVoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.response.AddVoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
+import com.db.crud.voting.exception.CannotFindEntityException;
+import com.db.crud.voting.exception.EntityExistsException;
+import com.db.crud.voting.exception.UserAlreadyVotedException;
 import com.db.crud.voting.model.Agenda;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.AgendaRepository;
@@ -53,7 +56,7 @@ public class AgendaServiceImpl implements AgendaService {
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
         Optional<Agenda> agenda = agendaRepository.findByQuestion(agendaRequest.question());
         if (agenda.isPresent()) {
-            throw new RuntimeException("This agenda was already created!");
+            throw new EntityExistsException("This agenda was already created!");
         }
         Agenda agendaCreated = AgendaMapper.dtoToAgenda(agendaRequest);
         agendaRepository.save(agendaCreated);
@@ -62,11 +65,11 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     public AddVoteResponse addVote(AddVoteRequest addvote) {
-        Agenda agenda = agendaRepository.findByQuestion(addvote.question()).orElseThrow(() -> new RuntimeException("Cannot Find this Agenda"));
-        User user = userRepository.findByCpf(addvote.userCpf()).orElseThrow(() -> new RuntimeException("Cannot find User"));
+        Agenda agenda = agendaRepository.findByQuestion(addvote.question()).orElseThrow(() -> new CannotFindEntityException("Cannot Find this Agenda"));
+        User user = userRepository.findByCpf(addvote.userCpf()).orElseThrow(() -> new CannotFindEntityException("Cannot find User"));
         List<User> usersVoted = agenda.getUsersVoted();
         if (usersVoted.contains(user)) {
-            return VoteMapper.voteToDto(false, user.getCpf());
+            throw new UserAlreadyVotedException("This user already voted!");
         }
         usersVoted.add(user);
         if (addvote.yes()) {
