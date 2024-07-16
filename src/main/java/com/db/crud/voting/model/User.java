@@ -49,4 +49,7 @@ public class User {
     @Column(name = "creation_date")
     private final LocalDateTime createdOn = LocalDateTime.now();
 
+    public String getFullname() {
+        return this.getFirstName()+" "+this.getSurname();
+    }
 }
