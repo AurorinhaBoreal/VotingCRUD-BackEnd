@@ -1,6 +1,6 @@
 package com.db.crud.voting.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.db.crud.voting.enums.Operation;
 
@@ -33,5 +33,5 @@ public class Log {
     private Operation operation;
 
     @Column(nullable = false)
-    private LocalDate realizedOn = LocalDate.now();
+    private LocalDateTime realizedOn = LocalDateTime.now();
 }
