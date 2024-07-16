@@ -52,10 +52,10 @@ This topic refers to all the technologies used in the project and the steps to b
   - ✅ [US005-1] Create Response Log DTO and Mapper
   - ✅ [US005-2] Implement Methods Related to User
   - ✅ [US005-3] Implement Methods Related to Agenda
-- 🚧 [US006] Error Treatment
-  - 🚧 [US006-1] Implement ErrorHandlers that are Related to User
-  - 🚧 [US006-2] Implement ErrorHandlers that are Related to Agenda
-  - 🚧 [US006-3] Implement ErrorHandlers that are Related to Log
+- ✅ [US006] Error Treatment
+  - ✅ [US006-1] Implement ErrorHandlers that are Related to User
+  - ✅ [US006-2] Implement ErrorHandlers that are Related to Agenda
+  - ✅ [US006-3] Implement ErrorHandlers that are Related to Log
 - 🚧 [US007] Test Implementation
   - 🚧 [US007-1] Unitary Tests - Happy
   - 🚧 [US007-2] Unitary Tests - Sad
