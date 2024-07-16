@@ -39,12 +39,10 @@ This topic refers to all the technologies used in the project and the steps to b
   - ✅ [US002-1] Create User Entity
   - ✅ [US002-2] Create Agenda Entity
   - ✅ [US002-3] Create Log Entity
-- 🚧 [US003] User Flow
-  - 🚧 [US003-1] Create Request and Response User DTO  
-  - 🚧 [US003-2] Create User
-  - 🚧 [US003-3] Implement Random CPF Treatment (Valid/Invalid)
-  - 🚧 [US003-4] Implement Random if User is allowed to vote
-  - 🚧 [US003-5] Implement Login Feature
+- ✅ [US003] User Flow
+  - ✅ [US003-1] Create Request and Response User DTO  
+  - ✅ [US003-2] Create User
+  - ✅ [US003-3] Implement Login Feature
 - 🚧 [US004] Agenda Flow
   - 🚧 [US004-1] Create Request and Response Agenda DTO 
   - 🚧 [US004-2] Create Agenda
