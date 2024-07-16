@@ -43,11 +43,11 @@ This topic refers to all the technologies used in the project and the steps to b
   - ✅ [US003-1] Create Request and Response User DTO  
   - ✅ [US003-2] Create User
   - ✅ [US003-3] Implement Login Feature
-- 🚧 [US004] Agenda Flow
-  - 🚧 [US004-1] Create Request and Response Agenda DTO 
-  - 🚧 [US004-2] Create Agenda
-  - 🚧 [US004-3] Implements Agenda Start, Duration and End
-  - 🚧 [US004-4] Implement User Vote in Agenda
+- ✅ [US004] Agenda Flow
+  - ✅ [US004-1] Create Request and Response Agenda DTO 
+  - ✅ [US004-2] Create Agenda
+  - ✅ [US004-3] Implements Agenda Start, Duration and End
+  - ✅ [US004-4] Implement User Vote in Agenda
 - 🚧 [US005] Implement Log Population
   - 🚧 [US005-1] Create Request and Response Log DTO 
   - 🚧 [US005-2] Implement Methods Related to User
@@ -67,6 +67,12 @@ This topic refers to all the technologies used in the project and the steps to b
   - 🚧 [US00X-2] Integration Tests - Sad
   - 🚧 [US00X-3] Performance Tests 
   - 🚧 [US00X-4] Swagger Customization
+
+### Fix
+
+- 🚧 [Fix] Related to fix or merge missing features in dev branch
+  - 🚧 [Fix-1] Implement JWT Token to Login
+  - 🚧 [Fix-2] Add getUser method
 
 
 ## License
