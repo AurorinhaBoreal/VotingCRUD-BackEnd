@@ -3,7 +3,9 @@ package com.db.crud.voting.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.db.crud.voting.dto.request.AddVoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
+import com.db.crud.voting.dto.response.AddVoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.model.Agenda;
 import com.db.crud.voting.service.agenda.AgendaService;
@@ -41,10 +43,16 @@ public class AgendaController {
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }
 
-    @PostMapping("/c")
+    @PostMapping("/create")
     public ResponseEntity<AgendaResponse> createAgenda(@RequestBody @Valid AgendaRequest agendaRequest) {
         var body = agendaService.createAgenda(agendaRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
+    }
+
+    @PostMapping("/vote")
+    public ResponseEntity<AddVoteResponse> voteAgenda(@RequestBody @Valid AddVoteRequest addVoteRequest) {
+        var body = agendaService.addVote(addVoteRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(body);
     }
 }
 
