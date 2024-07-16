@@ -22,13 +22,13 @@ public class CategoryConverter implements AttributeConverter<Category, String> {
     }
 
     @Override
-    public Category convertToEntityAttribute(String cat) {
-        if (cat == null) {
+    public Category convertToEntityAttribute(String code) {
+        if (code == null || code.equals("")) {
             return null;
         }
 
         return Stream.of(Category.values())
-                .filter(c -> c.getCode().equals(cat))
+                .filter(c -> c.getCode().equals(code))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
     }
