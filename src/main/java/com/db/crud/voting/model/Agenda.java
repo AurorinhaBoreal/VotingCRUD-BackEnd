@@ -1,10 +1,13 @@
 package com.db.crud.voting.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.db.crud.voting.enums.Category;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -51,6 +54,11 @@ public class Agenda {
     @Column(name = "duration_minutes")
     @Builder.Default
     private Integer duration = 1;
+
+    @Column(name = "users_voted")
+    @ElementCollection
+    @Builder.Default
+    private List<User> usersVoted = new ArrayList<>();
 
     @Column(name = "agenda_ended")
     @Builder.Default
