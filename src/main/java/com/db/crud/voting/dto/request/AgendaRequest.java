@@ -14,5 +14,8 @@ public record AgendaRequest(
     @NotBlank(message = "Inform a question for the agenda")
     String question,
 
+    @NotBlank(message = "Please inform a cpf")
+    String cpf,
+
     Integer duration){
 }

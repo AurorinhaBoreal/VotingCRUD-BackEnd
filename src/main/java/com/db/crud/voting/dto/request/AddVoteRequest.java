@@ -7,7 +7,7 @@ public record AddVoteRequest(
     String question,
 
     @NotBlank(message = "Inform the user who voted")
-    String userCpf,
+    String cpf,
     boolean yes,
     boolean no) {
 }
