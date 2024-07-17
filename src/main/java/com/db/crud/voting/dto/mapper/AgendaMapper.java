@@ -14,10 +14,11 @@ public interface AgendaMapper {
             .category(agenda.getCategory())
             .duration(agenda.getDuration())
             .question(agenda.getQuestion())
-            .hasEnded(false)
-            .noVotes(0)
-            .yesVotes(0)
-            .totalVotes(0)
+            .hasEnded(agenda.isHasEnded())
+            .noVotes(agenda.getNoVotes())
+            .yesVotes(agenda.getYesVotes())
+            .totalVotes(agenda.getTotalVotes())
+            .usersWhoVoted(agenda.getUsersVoted())
             .build();
     }
 

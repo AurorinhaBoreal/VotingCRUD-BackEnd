@@ -3,7 +3,6 @@ package com.db.crud.voting.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.db.crud.voting.dto.request.UserLoginRequest;
 import com.db.crud.voting.dto.request.UserRegisterRequest;
 import com.db.crud.voting.dto.response.UserResponse;
 import com.db.crud.voting.service.user.UserService;
@@ -32,12 +31,6 @@ public class UserController {
     public ResponseEntity<UserResponse> getSprecificUser(@RequestBody String cpf) {
         var body = userService.getUser(cpf);
         return ResponseEntity.status(HttpStatus.OK).body(body); 
-    }
-
-    @PostMapping
-    public ResponseEntity<UserResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
-        var body = userService.login(userLoginRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(body);
     }
     
     @PostMapping("/create")
