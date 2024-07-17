@@ -71,7 +71,8 @@ This topic refers to all the technologies used in the project and the steps to b
 ### Fix
 
 - ✅ [Fix] Related to fix or merge missing features in dev branch
-  - ✅ [Fix-1] Add getUser method
+  - ✅ [fix-1] Add getUser method
+  - ✅ [fix-2] Change way that methods validate User
 
 
 ## License
