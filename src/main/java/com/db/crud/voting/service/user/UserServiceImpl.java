@@ -11,11 +11,10 @@ import com.db.crud.voting.dto.request.UserRegisterRequest;
 import com.db.crud.voting.dto.response.UserResponse;
 import com.db.crud.voting.exception.AuthorizationException;
 import com.db.crud.voting.exception.CannotFindEntityException;
+import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.UserRepository;
 import com.db.crud.voting.service.logs.LogService;
-
-import jakarta.persistence.EntityExistsException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,5 +45,10 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userRegistered);
         logService.addLog("User", userRegistered.getId(), userRegistered.getFullname(), "C", userRegistered.getCreatedOn());
         return UserMapper.userToDto(userRegistered);
+    }
+
+    public UserResponse getUser(String cpf) {
+        User user = userRepository.findByCpf(cpf).orElseThrow(() -> new CannotFindEntityException("Cannot find this User"));
+        return UserMapper.userToDto(user);
     }
 }

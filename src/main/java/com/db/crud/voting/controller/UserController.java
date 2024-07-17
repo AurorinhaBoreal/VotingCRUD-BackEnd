@@ -28,11 +28,11 @@ public class UserController {
         this.userService = userService;
     }
     
-    // @GetMapping
-    // public ResponseEntity<UserResponse> getSprecificUser(@RequestBody String cpf) {
-    //     var body = userService.getUser(cpf);
-    //     return ResponseEntity.status(HttpStatus.OK).body(body); 
-    // }
+    @GetMapping
+    public ResponseEntity<UserResponse> getSprecificUser(@RequestBody String cpf) {
+        var body = userService.getUser(cpf);
+        return ResponseEntity.status(HttpStatus.OK).body(body); 
+    }
 
     @PostMapping
     public ResponseEntity<UserResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
