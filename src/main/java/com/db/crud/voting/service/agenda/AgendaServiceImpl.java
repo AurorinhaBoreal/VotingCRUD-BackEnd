@@ -13,6 +13,8 @@ import com.db.crud.voting.dto.request.AddVoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.response.AddVoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
+import com.db.crud.voting.enums.converters.UserTypeConverter;
+import com.db.crud.voting.exception.AuthorizationException;
 import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.exception.UserAlreadyVotedException;
@@ -25,11 +27,13 @@ import com.db.crud.voting.service.logs.LogService;
 @Service
 public class AgendaServiceImpl implements AgendaService {
     
+    UserTypeConverter userTypeConverter;
     AgendaRepository agendaRepository;
     UserRepository userRepository;
     LogService logService;
 
-    public AgendaServiceImpl(AgendaRepository agendaRepository, UserRepository userRepository, LogService logService) {
+    public AgendaServiceImpl(AgendaRepository agendaRepository, UserRepository userRepository, LogService logService, UserTypeConverter userTypeConverter) {
+        this.userTypeConverter = userTypeConverter;
         this.agendaRepository = agendaRepository;
         this.logService = logService;
         this.userRepository = userRepository;
@@ -54,6 +58,10 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
+        User user = userRepository.findByCpf(agendaRequest.cpf()).orElseThrow(() -> new CannotFindEntityException("Cannot find User with Cpf: "+agendaRequest.cpf()));
+        if (!userTypeConverter.convertToDatabaseColumn(user.getUserType()).equals("A")) {
+            throw new AuthorizationException("You don't have authorization to create a agenda!");
+        }
         Optional<Agenda> agenda = agendaRepository.findByQuestion(agendaRequest.question());
         if (agenda.isPresent()) {
             throw new EntityExistsException("This agenda was already created!");
@@ -65,8 +73,8 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     public AddVoteResponse addVote(AddVoteRequest addvote) {
+        User user = userRepository.findByCpf(addvote.cpf()).orElseThrow(() -> new CannotFindEntityException("The user with cpf: "+addvote.cpf()+" isn't registered!"));
         Agenda agenda = agendaRepository.findByQuestion(addvote.question()).orElseThrow(() -> new CannotFindEntityException("Cannot Find this Agenda"));
-        User user = userRepository.findByCpf(addvote.userCpf()).orElseThrow(() -> new CannotFindEntityException("Cannot find User"));
         List<User> usersVoted = agenda.getUsersVoted();
         if (usersVoted.contains(user)) {
             throw new UserAlreadyVotedException("This user already voted!");
@@ -79,6 +87,7 @@ public class AgendaServiceImpl implements AgendaService {
             int nVotes = agenda.getNoVotes();
             agenda.setNoVotes(nVotes+1);
         }
+        agenda.setTotalVotes(agenda.getNoVotes()+agenda.getYesVotes());
         agendaRepository.save(agenda);
         logService.addLog("User", user.getId(), user.getFullname(), "V", LocalDateTime.now());
         return VoteMapper.voteToDto(true, user.getCpf());
