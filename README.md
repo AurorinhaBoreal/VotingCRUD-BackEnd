@@ -11,7 +11,19 @@ The voting system has agendas and users that can vote in these agendas.
 
 ## Running the Project
 
-This part is of the project is still in development, but rather will be building Docker Containers or will be deployed on Render.
+To run the the back end is simple.
+
+You can simply run the commands related to gradle wrapper.
+
+- First run a ./gradlew build to build the project
+
+- And after that run the ./gradlew bootRun to run the project
+
+After that you have some options to test it:
+
+- You can run the FrontEnd Project - If it's already developed
+- You can go to http://localhost:8080/swagger-ui/index.html to see the Swagger documentation
+- Or simply create a Http Request on your favorite API Client
 
 ## Developing the Project
 
@@ -24,42 +36,43 @@ This topic refers to all the technologies used in the project and the steps to b
     - 📦 Spring Boot JPA
 - 🌶️ Lombok
 - 🧪 JUnit 5
+- 🐋 Docker
 - 🐘 PostgreSQL
+- 🛠️ Swagger
 
 ### US's - MPV
 
 - 🚧 [US000] Configure Repository
   - ✅ [US000-1] Implements a README
-  - 🚧 [US000-2] Configure GitHub Actions
-- 🚧 [US001] Configure Project
-  - 🚧 [US001-1] Create a Postgres Container
-  - 🚧 [US001-2] Configure JPA
-- 🚧 [US002-1] Create Database
-  - 🚧 [US002-1] Create User Entity
-  - 🚧 [US002-2] Create Agenda Entity
-  - 🚧 [US002-3] Create Log Entity
-- 🚧 [US003] Implement Log Population
-  - 🚧 [US003-1] Create Request and Response Log DTO 
-  - 🚧 [US003-2] Implement Methods Related to User
-  - 🚧 [US003-3] Implement Methods Related to Agenda
-- 🚧 [US004] User Flow
-  - 🚧 [US004-1] Create Request and Response User DTO  
-  - 🚧 [US004-2] Create User
-  - 🚧 [US004-3] Implement Random CPF Treatment (Valid/Invalid)
-  - 🚧 [US004-4] Implement Random if User is allowed to vote
-  - 🚧 [US004-5] Implement Login Feature
-- 🚧 [US005] Agenda Flow
-  - 🚧 [US005-1] Create Request and Response Agenda DTO 
-  - 🚧 [US005-2] Create Agenda
-  - 🚧 [US005-3] Implements Agenda Start, Duration and End
-  - 🚧 [US005-4] Implement User Vote in Agenda
-- 🚧 [US006] Error Treatment
-  - 🚧 [US006-1] Implement ErrorHandlers that are Related to User
-  - 🚧 [US006-2] Implement ErrorHandlers that are Related to Agenda
-  - 🚧 [US006-3] Implement ErrorHandlers that are Related to Log
-- 🚧 [US007] Test Implementation
-  - 🚧 [US007-1] Unitary Tests - Happy
-  - 🚧 [US007-2] Unitary Tests - Sad
+  - ✅ [US000-2] Configure GitHub Actions
+- ✅ [US001] Configure Project
+  - ✅ [US001-1] Create a Postgres Container
+  - ✅ [US001-2] Configure JPA
+  - ✅ [US001-3] Swagger Implementation
+- ✅ [US002] Create Database
+  - ✅ [US002-1] Create User Entity
+  - ✅ [US002-2] Create Agenda Entity
+  - ✅ [US002-3] Create Log Entity
+- ✅ [US003] User Flow
+  - ✅ [US003-1] Create Request and Response User DTO  
+  - ✅ [US003-2] Create User
+  - ✅ [US003-3] Implement Login Feature
+- ✅ [US004] Agenda Flow
+  - ✅ [US004-1] Create Request and Response Agenda DTO 
+  - ✅ [US004-2] Create Agenda
+  - ✅ [US004-3] Implements Agenda Start, Duration and End
+  - ✅ [US004-4] Implement User Vote in Agenda
+- ✅ [US005] Implement Log Population
+  - ✅ [US005-1] Create Response Log DTO and Mapper
+  - ✅ [US005-2] Implement Methods Related to User
+  - ✅ [US005-3] Implement Methods Related to Agenda
+- ✅ [US006] Error Treatment
+  - ✅ [US006-1] Implement ErrorHandlers that are Related to User
+  - ✅ [US006-2] Implement ErrorHandlers that are Related to Agenda
+  - ✅ [US006-3] Implement ErrorHandlers that are Related to Log
+- ✅ [US007] Test Implementation
+  - ✅ [US007-1] Unitary Tests - Happy
+  - ✅ [US007-2] Unitary Tests - Sad
 
 ### US's - Extra
 
@@ -68,6 +81,12 @@ This topic refers to all the technologies used in the project and the steps to b
   - 🚧 [US00X-3] Integration Tests - Happy
   - 🚧 [US00X-4] Integration Tests - Sad
   - 🚧 [US00X-5] Performance Tests 
+
+### Fix
+
+- ✅ [Fix] Related to fix or merge missing features in dev branch
+  - ✅ [fix-1] Add getUser method
+  - ✅ [fix-2] Change way that methods validate User
 
 
 ## License
