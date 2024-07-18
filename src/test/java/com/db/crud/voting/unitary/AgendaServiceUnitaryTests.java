@@ -162,7 +162,7 @@ class AgendaServiceUnitaryTests {
         agendaService.createAgenda(agendaDTOValid);
     });
     
-    assertEquals("Cannot find User with Cpf: "+agendaDTOValid.cpf(), thrown.getMessage());
+    assertEquals("The user with cpf: "+agendaDTOValid.cpf()+" isn't registered!", thrown.getMessage());
     }
 
     @Test
