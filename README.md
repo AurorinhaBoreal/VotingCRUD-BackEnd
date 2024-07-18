@@ -56,9 +56,9 @@ This topic refers to all the technologies used in the project and the steps to b
   - ✅ [US006-1] Implement ErrorHandlers that are Related to User
   - ✅ [US006-2] Implement ErrorHandlers that are Related to Agenda
   - ✅ [US006-3] Implement ErrorHandlers that are Related to Log
-- 🚧 [US007] Test Implementation
-  - 🚧 [US007-1] Unitary Tests - Happy
-  - 🚧 [US007-2] Unitary Tests - Sad
+- ✅ [US007] Test Implementation
+  - ✅ [US007-1] Unitary Tests - Happy
+  - ✅ [US007-2] Unitary Tests - Sad
 
 ### US's - Extra
 
