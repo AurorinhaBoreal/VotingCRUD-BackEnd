@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.response.AgendaResponse;
+import com.db.crud.voting.enums.Category;
 import com.db.crud.voting.model.Agenda;
 
 @Mapper(componentModel = "spring")
@@ -22,9 +23,9 @@ public interface AgendaMapper {
             .build();
     }
 
-    static Agenda dtoToAgenda(AgendaRequest agendaRequest) {
+    static Agenda dtoToAgenda(AgendaRequest agendaRequest, Category agendaCategory) {
         return Agenda.builder()
-            .category(agendaRequest.category())
+            .category(agendaCategory)
             .duration(agendaRequest.duration())
             .question(agendaRequest.question())
             .build();
