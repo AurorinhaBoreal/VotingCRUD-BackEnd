@@ -43,9 +43,6 @@ public class User {
     @Column(length = 11, nullable = false, unique = true)
     private String cpf;
 
-    @Column(nullable = false)
-    private String password;
-
     @Column(name = "creation_date")
     private final LocalDateTime createdOn = LocalDateTime.now();
 

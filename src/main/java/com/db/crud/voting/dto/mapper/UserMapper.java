@@ -2,8 +2,9 @@ package com.db.crud.voting.dto.mapper;
 
 import org.mapstruct.Mapper;
 
-import com.db.crud.voting.dto.request.UserRegisterRequest;
+import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
+import com.db.crud.voting.enums.UserType;
 import com.db.crud.voting.model.User;
 
 @Mapper(componentModel = "spring")
@@ -17,13 +18,12 @@ public interface UserMapper {
                 .build();
     }
 
-    static User dtoToUser(UserRegisterRequest userDTO) {
+    static User dtoToUser(UserRequest userDTO, UserType userType) {
         return User.builder()
-                .userType(userDTO.userType())
+                .userType(userType)
                 .firstName(userDTO.firstName())
                 .surname(userDTO.surname())
                 .cpf(userDTO.cpf())
-                .password(userDTO.password())
                 .build();
     }
 }

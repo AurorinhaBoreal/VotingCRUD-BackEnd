@@ -43,4 +43,14 @@ public class ErrorHandler {
     public ResponseEntity<String> handleErrorUserAlreadyVotedException(UserAlreadyVotedException e) {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
     }
+
+    @ExceptionHandler(VoteConflictException.class)
+    public ResponseEntity<String> handleErrorVoteConflictException(VoteConflictException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
+    @ExceptionHandler(AgendaEndedException.class)
+    public ResponseEntity<String> handleErrorAgendaEndedException(AgendaEndedException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
 }

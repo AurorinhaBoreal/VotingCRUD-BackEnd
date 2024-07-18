@@ -1,7 +1,7 @@
 package com.db.crud.voting.enums;
 
 public enum Operation {
-    CREATE("C"), LOGIN("L"), VOTE("V");
+    CREATE("C"), VOTE("V");
 
     private String code;
 

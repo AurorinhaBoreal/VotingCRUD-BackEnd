@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 @RestController
@@ -42,7 +44,7 @@ public class AgendaController {
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<AgendaResponse> createAgenda(@RequestBody @Valid AgendaRequest agendaRequest) {
         var body = agendaService.createAgenda(agendaRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
@@ -52,6 +54,12 @@ public class AgendaController {
     public ResponseEntity<AddVoteResponse> voteAgenda(@RequestBody @Valid AddVoteRequest addVoteRequest) {
         var body = agendaService.addVote(addVoteRequest);
         return ResponseEntity.status(HttpStatus.OK).body(body);
+    }
+
+    @PutMapping("/finalize")
+    public ResponseEntity<String> finishAgenda(@RequestBody String question) {
+        var body = agendaService.finishAgenda(question);        
+        return ResponseEntity.ok().body(body);
     }
 }
 
