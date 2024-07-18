@@ -19,7 +19,9 @@ public class LogServiceImpl implements LogService {
     LogRepository logRepository;
     OperationConverter operationConverter;
 
-    public LogServiceImpl(LogRepository logRepository, OperationConverter operationConverter) {
+    public LogServiceImpl(
+        LogRepository logRepository, 
+        OperationConverter operationConverter) {
         this.logRepository = logRepository;
         this.operationConverter = operationConverter;
     }
@@ -27,16 +29,20 @@ public class LogServiceImpl implements LogService {
     public List<LogResponse> getLogs() {
         List<LogResponse> logResponse = new ArrayList<>();
         List<Log> logs = logRepository.findAll();
+
         logs.forEach(log ->
             logResponse.add(LogMapper.logToDto(log))
         );
+
         return logResponse;
     }
 
-    public boolean addLog(String objectType, Long objectId, String objectInfo, String operationStr, LocalDateTime realizedOn) {
-        Operation operationType = operationConverter.convertToEntityAttribute(operationStr);
+    public boolean addLog(String objectType, Long objectId, String objectInfo, String operationCode, LocalDateTime realizedOn) {
+        Operation operationType = operationConverter.convertToEntityAttribute(operationCode);
+
         Log log = LogMapper.infoToLog(objectType, objectId, objectInfo, operationType, realizedOn);
         logRepository.save(log);
+        
         return true;
     }
 }
