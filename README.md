@@ -11,7 +11,19 @@ The voting system has agendas and users that can vote in these agendas.
 
 ## Running the Project
 
-This part is of the project is still in development, but rather will be building Docker Containers or will be deployed on Render.
+To run the the back end is simple.
+
+You can simply run the commands related to gradle wrapper.
+
+- First run a ./gradlew build to build the project
+
+- And after that run the ./gradlew bootRun to run the project
+
+After that you have some options to test it:
+
+- You can run the FrontEnd Project - If it's already developed
+- You can go to http://localhost:8080/swagger-ui/index.html to see the Swagger documentation
+- Or simply create a Http Request on your favorite API Client
 
 ## Developing the Project
 
@@ -24,7 +36,9 @@ This topic refers to all the technologies used in the project and the steps to b
     - 📦 Spring Boot JPA
 - 🌶️ Lombok
 - 🧪 JUnit 5
+- 🐋 Docker
 - 🐘 PostgreSQL
+- 🛠️ Swagger
 
 ### US's - MPV
 
