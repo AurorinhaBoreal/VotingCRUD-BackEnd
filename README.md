@@ -21,7 +21,7 @@ You can simply run the commands related to gradle wrapper.
 
 After that you have some options to test it:
 
-- You can run the FrontEnd Project - If it's already developed
+- You can run the FrontEnd Project - [Here](https://github.com/AurorinhaBoreal/VotacaoCRUD-FrontEnd/edit/main/README.md)
 - You can go to http://localhost:8080/swagger-ui/index.html to see the Swagger documentation
 - Or simply create a Http Request on your favorite API Client
 
@@ -42,7 +42,7 @@ This topic refers to all the technologies used in the project and the steps to b
 
 ### US's - MPV
 
-- 🚧 [US000] Configure Repository
+- ✅ [US000] Configure Repository
   - ✅ [US000-1] Implements a README
   - ✅ [US000-2] Configure GitHub Actions
 - ✅ [US001] Configure Project
