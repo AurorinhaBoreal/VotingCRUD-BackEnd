@@ -3,6 +3,7 @@ package com.db.crud.voting.service.logs;
 import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,7 @@ public class LogServiceImpl implements LogService {
 
     public boolean addLog(String objectType, Long objectId, String objectInfo, String operationCode, LocalDateTime realizedOn) {
         Operation operationType = operationConverter.convertToEntityAttribute(operationCode);
+        realizedOn = realizedOn.truncatedTo(ChronoUnit.SECONDS);
 
         Log log = LogMapper.infoToLog(objectType, objectId, objectInfo, operationType, realizedOn);
         logRepository.save(log);
