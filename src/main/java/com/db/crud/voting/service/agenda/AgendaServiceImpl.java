@@ -57,7 +57,7 @@ public class AgendaServiceImpl implements AgendaService {
 
     public List<AgendaResponse> getEndedAgendas() {
         List<AgendaResponse> agendaResponse = new ArrayList<>();
-        List<Agenda> agendas = agendaRepository.findByHasEnded(false);
+        List<Agenda> agendas = agendaRepository.findByHasEnded(true);
 
         agendas.forEach(agenda -> 
             agendaResponse.add(AgendaMapper.agendaToDto(agenda))
@@ -68,7 +68,7 @@ public class AgendaServiceImpl implements AgendaService {
 
     public List<AgendaResponse> getActiveAgendas() {
         List<AgendaResponse> agendaResponse = new ArrayList<>();
-        List<Agenda> agendas = agendaRepository.findByHasEnded(true);
+        List<Agenda> agendas = agendaRepository.findByHasEnded(false);
 
         agendas.forEach(agenda -> {
             LocalDateTime actualDate = LocalDateTime.now();
