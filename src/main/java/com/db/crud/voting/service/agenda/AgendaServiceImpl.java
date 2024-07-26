@@ -103,9 +103,12 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     public AddVoteResponse addVote(AddVoteRequest addvote) {
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         User user = findUser(addvote.cpf());
         Agenda agenda = findAgenda(addvote.question());
 
+        if (now.isAfter(agenda.getFinishOn())) finishAgenda(agenda);
+        
         if (agenda.isHasEnded()) {
             throw new AgendaEndedException("This agenda already ended!");
         }
