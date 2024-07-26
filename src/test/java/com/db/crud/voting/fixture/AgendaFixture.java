@@ -1,5 +1,7 @@
 package com.db.crud.voting.fixture;
 
+import java.time.LocalDateTime;
+
 import com.db.crud.voting.dto.mapper.AgendaMapper;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.enums.Category;
@@ -38,16 +40,19 @@ public class AgendaFixture {
 
     public static Agenda AgendaEntityValid() {
         Category category = categoryConverter.convertToEntityAttribute("S");
-        return AgendaMapper.dtoToAgenda(AgendaDTOValid(), category);
+        LocalDateTime finishOn = LocalDateTime.now().plusMinutes(AgendaDTOValid().duration());
+        return AgendaMapper.dtoToAgenda(AgendaDTOValid(), category, finishOn);
     }
 
     public static Agenda AgendaEntityValid2() {
         Category category = categoryConverter.convertToEntityAttribute("T");
-        return AgendaMapper.dtoToAgenda(AgendaDTOValid2(), category);
+        LocalDateTime finishOn = LocalDateTime.now().plusMinutes(AgendaDTOValid().duration());
+        return AgendaMapper.dtoToAgenda(AgendaDTOValid2(), category, finishOn);
     }
 
     public static Agenda AgendaEntityInvalid() {
         Category category = categoryConverter.convertToEntityAttribute("");
-        return AgendaMapper.dtoToAgenda(AgendaDTOInvalid(), category);
+        LocalDateTime finishOn = LocalDateTime.now().plusMinutes(AgendaDTOValid().duration());
+        return AgendaMapper.dtoToAgenda(AgendaDTOInvalid(), category, finishOn);
     }
 }

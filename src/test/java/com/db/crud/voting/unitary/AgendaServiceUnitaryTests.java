@@ -5,10 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -61,6 +64,9 @@ class AgendaServiceUnitaryTests {
     @Mock
     LogService logService;
 
+    @Mock
+    AgendaServiceImpl agendaServiceMock;
+
     @InjectMocks
     AgendaServiceImpl agendaService;
 
@@ -103,14 +109,18 @@ class AgendaServiceUnitaryTests {
         assertTrue(agendas.contains(agendaEntityValid));
     }
 
+    // I will see this test later
     @Test
     @DisplayName("Happy Test: Create Agenda")
     void shouldCreateAgenda() {
+        LocalDateTime finishOn = (LocalDateTime.now()).truncatedTo(ChronoUnit.SECONDS).plusMinutes(agendaDTOValid.duration());
+        
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.empty());
         when(userTypeConverter.convertToDatabaseColumn(any())).thenReturn("A");
         when(categoryConverter.convertToEntityAttribute("S")).thenReturn(Category.SPORTS);
-        when(agendaMapperWrapper.dtoToAgenda(agendaDTOValid, Category.SPORTS)).thenReturn(agendaEntityValid);
+        when(logService.addLog(anyString(), anyLong(), anyString(), any(), any())).thenReturn(true);
+        when(agendaMapperWrapper.dtoToAgenda(agendaDTOValid, Category.SPORTS, finishOn)).thenReturn(agendaEntityValid);
         agendaEntityValid.setId(2L);
         
         AgendaResponse agenda = agendaService.createAgenda(agendaDTOValid);
@@ -145,11 +155,9 @@ class AgendaServiceUnitaryTests {
     @Test
     @DisplayName("Happy Test: End Agenda")
     void shouldfinishAgenda() {
-        when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.of(agendaEntityValid));
-
         agendaEntityValid.setId(1L);
         agendaEntityValid.setHasEnded(true);
-        agendaService.finishAgenda(agendaEntityValid.getQuestion());
+        agendaService.finishAgenda(agendaEntityValid);
         
 
         assertTrue(agendaEntityValid.isHasEnded());
