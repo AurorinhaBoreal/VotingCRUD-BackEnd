@@ -13,6 +13,7 @@ public record AgendaResponse(
     Integer totalVotes,
     Integer duration,
     boolean hasEnded,
-    String createdOn) {
+    String createdOn,
+    String finishOn) {
     
 }

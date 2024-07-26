@@ -22,6 +22,7 @@ public interface AgendaMapper {
             .yesVotes(agenda.getYesVotes())
             .totalVotes(agenda.getTotalVotes())
             .createdOn(agenda.getCreatedOn().toString())
+            .finishOn(agenda.getFinishOn().toString())
             .build();
     }
 
