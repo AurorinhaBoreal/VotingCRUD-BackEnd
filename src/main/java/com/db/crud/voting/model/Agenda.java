@@ -3,6 +3,7 @@ package com.db.crud.voting.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.temporal.ChronoUnit;
 
 import com.db.crud.voting.enums.Category;
 
@@ -65,5 +66,10 @@ public class Agenda {
     private boolean hasEnded = false;
 
     @Column(name = "creation_date")
-    private final LocalDateTime createdOn = LocalDateTime.now();
+    @Builder.Default
+    private final LocalDateTime createdOn = (LocalDateTime.now()).truncatedTo(ChronoUnit.SECONDS);
+
+    @Column(name = "finish_date")
+    @Builder.Default
+    private final LocalDateTime finishOn = LocalDateTime.now().plusMinutes(1);
 }

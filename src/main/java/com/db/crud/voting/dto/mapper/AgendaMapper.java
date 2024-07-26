@@ -1,5 +1,7 @@
 package com.db.crud.voting.dto.mapper;
 
+import java.time.LocalDateTime;
+
 import org.mapstruct.Mapper;
 
 import com.db.crud.voting.dto.request.AgendaRequest;
@@ -23,11 +25,12 @@ public interface AgendaMapper {
             .build();
     }
 
-    static Agenda dtoToAgenda(AgendaRequest agendaRequest, Category agendaCategory) {
+    static Agenda dtoToAgenda(AgendaRequest agendaRequest, Category agendaCategory, LocalDateTime agendaFinish) {
         return Agenda.builder()
             .category(agendaCategory)
             .duration(agendaRequest.duration())
             .question(agendaRequest.question())
+            .finishOn(agendaFinish)
             .build();
     }
 }
