@@ -83,7 +83,7 @@ class AgendaServiceUnitaryTests {
     void shouldListActiveAgendas() {
         List<Agenda> agendas = new ArrayList<>();
         agendas.add(agendaEntityValid);
-        when(agendaRepository.findByHasEnded(true)).thenReturn(agendas);
+        when(agendaRepository.findByHasEnded(false)).thenReturn(agendas);
 
         List<AgendaResponse> agendaResponse = agendaService.getActiveAgendas();
         
@@ -95,7 +95,7 @@ class AgendaServiceUnitaryTests {
     @DisplayName("Happy Test: Should List Ended Agendas")
     void shouldListEndedAgendas() {
         List<Agenda> agendas = new ArrayList<>();
-        when(agendaRepository.findByHasEnded(false)).thenReturn(agendas);
+        when(agendaRepository.findByHasEnded(true)).thenReturn(agendas);
 
         agendaEntityValid.setId(2L);
         
