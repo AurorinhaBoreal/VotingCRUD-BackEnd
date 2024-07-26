@@ -3,17 +3,20 @@ package com.db.crud.voting.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.temporal.ChronoUnit;
 
 import com.db.crud.voting.enums.Category;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,8 +59,13 @@ public class Agenda {
     private Integer duration = 1;
 
     @Column(name = "users_voted")
-    @ElementCollection
     @Builder.Default
+    @ManyToMany
+    @JoinTable(
+        name = "tbl_agenda_users_voted",
+        joinColumns = @JoinColumn(name = "tbl_agenda_id_agenda"),
+        inverseJoinColumns = @JoinColumn(name = "users_voted_id_user")
+    )
     private List<User> usersVoted = new ArrayList<>();
 
     @Column(name = "agenda_ended")
@@ -65,5 +73,10 @@ public class Agenda {
     private boolean hasEnded = false;
 
     @Column(name = "creation_date")
-    private final LocalDateTime createdOn = LocalDateTime.now();
+    @Builder.Default
+    private final LocalDateTime createdOn = (LocalDateTime.now()).truncatedTo(ChronoUnit.SECONDS);
+
+    @Column(name = "finish_date")
+    @Builder.Default
+    private final LocalDateTime finishOn = LocalDateTime.now().plusMinutes(1);
 }

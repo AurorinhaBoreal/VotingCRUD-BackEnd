@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,6 @@ public class AgendaServiceImpl implements AgendaService {
     UserTypeConverter userTypeConverter;
     CategoryConverter categoryConverter;
     AgendaMapperWrapper agendaMapperWrapper;
-
     public AgendaServiceImpl(
             AgendaRepository agendaRepository, 
             UserRepository userRepository, 
@@ -57,7 +57,7 @@ public class AgendaServiceImpl implements AgendaService {
 
     public List<AgendaResponse> getEndedAgendas() {
         List<AgendaResponse> agendaResponse = new ArrayList<>();
-        List<Agenda> agendas = agendaRepository.findByHasEnded(false);
+        List<Agenda> agendas = agendaRepository.findByHasEnded(true);
 
         agendas.forEach(agenda -> 
             agendaResponse.add(AgendaMapper.agendaToDto(agenda))
@@ -68,11 +68,14 @@ public class AgendaServiceImpl implements AgendaService {
 
     public List<AgendaResponse> getActiveAgendas() {
         List<AgendaResponse> agendaResponse = new ArrayList<>();
-        List<Agenda> agendas = agendaRepository.findByHasEnded(true);
+        List<Agenda> agendas = agendaRepository.findByHasEnded(false);
 
-        agendas.forEach(agenda -> 
-            agendaResponse.add(AgendaMapper.agendaToDto(agenda))
-        );
+        agendas.forEach(agenda -> {
+            LocalDateTime actualDate = LocalDateTime.now();
+            if (actualDate.isAfter(agenda.getFinishOn())) {
+                finishAgenda(agenda);
+            } else agendaResponse.add(AgendaMapper.agendaToDto(agenda));
+        });
         
         return agendaResponse;
     }
@@ -90,7 +93,8 @@ public class AgendaServiceImpl implements AgendaService {
         }
 
         Category agendaCategory = (categoryConverter.convertToEntityAttribute(agendaRequest.category()));
-        Agenda agendaCreated = agendaMapperWrapper.dtoToAgenda(agendaRequest, agendaCategory);
+        LocalDateTime agendaFinish = getFinishDate(agendaRequest.duration());
+        Agenda agendaCreated = agendaMapperWrapper.dtoToAgenda(agendaRequest, agendaCategory, agendaFinish);
         agendaRepository.save(agendaCreated);
 
         logService.addLog("Agenda", agendaCreated.getId(), agendaCreated.getQuestion(), "C", agendaCreated.getCreatedOn());
@@ -99,9 +103,12 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     public AddVoteResponse addVote(AddVoteRequest addvote) {
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         User user = findUser(addvote.cpf());
         Agenda agenda = findAgenda(addvote.question());
 
+        if (now.isAfter(agenda.getFinishOn())) finishAgenda(agenda);
+        
         if (agenda.isHasEnded()) {
             throw new AgendaEndedException("This agenda already ended!");
         }
@@ -129,8 +136,7 @@ public class AgendaServiceImpl implements AgendaService {
         return VoteMapper.voteToDto(true, user.getCpf());
     }
 
-    public String finishAgenda(String question) {
-        Agenda agenda = findAgenda(question);
+    public String finishAgenda(Agenda agenda) {
         agendaRepository.finishAgenda(agenda.getId());
         agendaRepository.save(agenda);
         return "Agenda Ended!";
@@ -146,5 +152,9 @@ public class AgendaServiceImpl implements AgendaService {
         return userRepository.findByCpf(cpf).orElseThrow(
             () -> new CannotFindEntityException("The user with cpf: "+cpf+" isn't registered!")
         );
+    }
+
+    public LocalDateTime getFinishDate(Integer duration) {
+        return (LocalDateTime.now().plusMinutes(duration)).truncatedTo(ChronoUnit.SECONDS);
     }
 }
