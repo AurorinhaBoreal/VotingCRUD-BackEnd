@@ -11,16 +11,15 @@ The voting system has agendas and users that can vote in these agendas.
 
 ## Running the Project
 
-To run the the back end is simple.
+To run the the back end is simple. 
 
-You can simply run the commands related to gradle wrapper.
+Because Docker do all the hard work you simply need to run the command to start building the database and api images and containers.
 
-- First run a ./gradlew build to build the project
-
-- And after that run the ./gradlew bootRun to run the project
+- Just run ```docker compose up -d``` inside the repository's folder
 
 After that you have some options to test it:
 
+- You can go to the deployed FrontEnd [Here](https://votacao-front.onrender.com/)
 - You can run the FrontEnd Project - [Here](https://github.com/AurorinhaBoreal/VotacaoCRUD-FrontEnd/edit/main/README.md)
 - You can go to http://localhost:8080/swagger-ui/index.html to see the Swagger documentation
 - Or simply create a Http Request on your favorite API Client
