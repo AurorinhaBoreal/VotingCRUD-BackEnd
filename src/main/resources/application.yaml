@@ -1,8 +1,8 @@
 spring:
   datasource:
-    password: ${POSTGRES_PASSWORD}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     url: ${DB_URL}
-    username: ${POSTGRES_USER}
   jpa:
     hibernate:
       ddl-auto: update # Or "create-drop"
