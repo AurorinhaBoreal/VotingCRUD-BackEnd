@@ -1,9 +1,22 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  postgres:
-    image: postgres:13
-    env_file:
-      - .env
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: docker-db2
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user123
     ports:
-      - 5432:5432
+      - "5432:5432"
+
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/docker-db2
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: user123
+    depends_on:
+      - db
