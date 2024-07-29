@@ -11,16 +11,16 @@ The voting system has agendas and users that can vote in these agendas.
 
 ## Running the Project
 
-To run the the back end is simple. 
+Because the API is deployed, you can just open the frontEnd for the communication to be made, if you still want to see it working, the deployed link is [this](https://votacao-api.onrender.com/agenda).
 
-Because Docker do all the hard work you simply need to run the command to start building the database and api images and containers.
+But if you still want to test the API locally, you can read the section below.
+
+You can use Docker to do all the hard work. You simply need to run the command to start building the database and api images and containers.
 
 - Just run ```docker compose up -d``` inside the repository's folder
 
 After that you have some options to test it:
 
-- You can go to the deployed FrontEnd [Here](https://votacao-front.onrender.com/)
-- You can run the FrontEnd Project - [Here](https://github.com/AurorinhaBoreal/VotacaoCRUD-FrontEnd/edit/main/README.md)
 - You can go to http://localhost:8080/swagger-ui/index.html to see the Swagger documentation
 - Or simply create a Http Request on your favorite API Client
 
