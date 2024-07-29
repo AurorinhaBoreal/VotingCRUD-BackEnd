@@ -11,7 +11,7 @@ The voting system has agendas and users that can vote in these agendas.
 
 ## Running the Project
 
-Because the API is deployed, you can just open the frontEnd for the communication to be made, if you still want to see it working, the deployed link is [this](https://votacao-api.onrender.com/agenda).
+Because the API is deployed, you can just open the frontEnd for the communication to be made, if you still want to see the BackEnd working, the deployed link is [this](https://votacao-api.onrender.com/agenda).
 
 But if you want to test the API locally, you can read the section below.
 
