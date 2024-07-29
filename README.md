@@ -13,7 +13,7 @@ The voting system has agendas and users that can vote in these agendas.
 
 Because the API is deployed, you can just open the frontEnd for the communication to be made, if you still want to see it working, the deployed link is [this](https://votacao-api.onrender.com/agenda).
 
-But if you still want to test the API locally, you can read the section below.
+But if you want to test the API locally, you can read the section below.
 
 You can use Docker to do all the hard work. You simply need to run the command to start building the database and api images and containers.
 
@@ -21,6 +21,7 @@ You can use Docker to do all the hard work. You simply need to run the command t
 
 After that you have some options to test it:
 
+- You can run the frontEnd locally - [Read the READNE in the repository](https://github.com/AurorinhaBoreal/VotacaoCRUD-FrontEnd)
 - You can go to http://localhost:8080/swagger-ui/index.html to see the Swagger documentation
 - Or simply create a Http Request on your favorite API Client
 
