@@ -1,11 +1,14 @@
 package com.db.crud.voting.service.user;
 
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
+import com.db.crud.voting.dto.mapper.LogMapper;
 import com.db.crud.voting.dto.mapper.UserMapper;
 import com.db.crud.voting.dto.mapper.UserMapperWrapper;
+import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
 import com.db.crud.voting.enums.UserType;
@@ -41,7 +44,8 @@ public class UserServiceImpl implements UserService {
         User userRegistered = userMapperWrapper.dtoToUser(userRegisterDto, userType);
         userRepository.save(userRegistered);
 
-        logService.addLog("User", userRegistered.getId(), userRegistered.getFullname(), "C", userRegistered.getCreatedOn());
+        LogObj logObj = buildObj("User", userRegistered.getId(), userRegistered.getFullname(), "C", userRegistered.getCreatedOn());
+        logService.addLog(logObj);
         
         return UserMapper.userToDto(userRegistered);
     }
@@ -60,5 +64,9 @@ public class UserServiceImpl implements UserService {
             default:
                 throw new InvalidEnumException("This userType isn't Valid!");
         }
+    }
+
+    public LogObj buildObj(String type, Long id, String name, String operation, LocalDateTime realizedOn) {
+        return LogMapper.logObj(type, id, name, operation, realizedOn);
     }
 }

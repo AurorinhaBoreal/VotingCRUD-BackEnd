@@ -1,8 +1,8 @@
 package com.db.crud.voting.service.logs;
 
 import java.util.List;
-import java.time.LocalDateTime;
 
+import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.response.LogResponse;
 
 public interface LogService {
@@ -10,9 +10,5 @@ public interface LogService {
     List<LogResponse> getLogs();
 
     boolean addLog(
-        String objectType, 
-        Long objectId, 
-        String objectInfo, 
-        String operation, 
-        LocalDateTime realizedOn);
+        LogObj logDto);
 }

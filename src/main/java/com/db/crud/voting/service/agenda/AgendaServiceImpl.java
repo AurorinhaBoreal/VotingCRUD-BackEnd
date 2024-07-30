@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.db.crud.voting.dto.mapper.AgendaMapper;
 import com.db.crud.voting.dto.mapper.AgendaMapperWrapper;
+import com.db.crud.voting.dto.mapper.LogMapper;
 import com.db.crud.voting.dto.mapper.VoteMapper;
 import com.db.crud.voting.dto.request.AddVoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
+import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.response.AddVoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Category;
@@ -91,7 +93,8 @@ public class AgendaServiceImpl implements AgendaService {
         Agenda agendaCreated = agendaMapperWrapper.dtoToAgenda(agendaRequest, agendaCategory, agendaFinish);
         agendaRepository.save(agendaCreated);
 
-        logService.addLog("Agenda", agendaCreated.getId(), agendaCreated.getQuestion(), "C", agendaCreated.getCreatedOn());
+        LogObj logObj = buildObj("Agenda", agendaCreated.getId(), agendaCreated.getQuestion(), "C", agendaCreated.getCreatedOn());
+        logService.addLog(logObj);
 
         return AgendaMapper.agendaToDto(agendaCreated);
     }
@@ -125,7 +128,8 @@ public class AgendaServiceImpl implements AgendaService {
         agenda.setTotalVotes(agenda.getNoVotes()+agenda.getYesVotes());
         agendaRepository.save(agenda);
         
-        logService.addLog("User", user.getId(), user.getFullname(), "V", LocalDateTime.now());
+        LogObj logObj = buildObj("User", user.getId(), user.getFullname(), "V", LocalDateTime.now());
+        logService.addLog(logObj);
         
         return VoteMapper.voteToDto(true, user.getCpf());
     }
@@ -165,5 +169,9 @@ public class AgendaServiceImpl implements AgendaService {
             default:
                 throw new InvalidEnumException("This category doesn't Exists!");
         }
+    }
+
+    public LogObj buildObj(String type, Long id, String question, String operation, LocalDateTime realizedOn) {
+        return LogMapper.logObj(type, id, question, operation, realizedOn);
     }
 }

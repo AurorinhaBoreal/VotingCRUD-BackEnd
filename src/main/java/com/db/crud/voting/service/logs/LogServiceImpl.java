@@ -8,6 +8,7 @@ import java.time.temporal.ChronoUnit;
 import org.springframework.stereotype.Service;
 
 import com.db.crud.voting.dto.mapper.LogMapper;
+import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.response.LogResponse;
 import com.db.crud.voting.enums.Operation;
 import com.db.crud.voting.exception.InvalidEnumException;
@@ -34,11 +35,11 @@ public class LogServiceImpl implements LogService {
         return logResponse;
     }
 
-    public boolean addLog(String objectType, Long objectId, String objectInfo, String operationCode, LocalDateTime realizedOn) {
-        Operation operationType = convertOperation(operationCode);
-        realizedOn = realizedOn.truncatedTo(ChronoUnit.SECONDS);
+    public boolean addLog(LogObj logDto) {
+        Operation operation = convertOperation(logDto.operation());
+        LocalDateTime realizedOn = logDto.realizedOn().truncatedTo(ChronoUnit.SECONDS);
 
-        Log log = LogMapper.infoToLog(objectType, objectId, objectInfo, operationType, realizedOn);
+        Log log = LogMapper.infoToLog(logDto, operation, realizedOn);
         logRepository.save(log);
         
         return true;
