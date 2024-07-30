@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -27,8 +25,7 @@ import com.db.crud.voting.dto.request.AddVoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Category;
-import com.db.crud.voting.enums.converters.CategoryConverter;
-import com.db.crud.voting.enums.converters.UserTypeConverter;
+import com.db.crud.voting.enums.UserType;
 import com.db.crud.voting.exception.AuthorizationException;
 import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
@@ -42,6 +39,7 @@ import com.db.crud.voting.repository.AgendaRepository;
 import com.db.crud.voting.repository.UserRepository;
 import com.db.crud.voting.service.agenda.AgendaServiceImpl;
 import com.db.crud.voting.service.logs.LogService;
+import com.db.crud.voting.service.user.UserServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class AgendaServiceUnitaryTests {
@@ -56,16 +54,10 @@ class AgendaServiceUnitaryTests {
     UserRepository userRepository;
 
     @Mock
-    UserTypeConverter userTypeConverter;
-
-    @Mock
-    CategoryConverter categoryConverter;
+    UserServiceImpl userService;
 
     @Mock
     LogService logService;
-
-    @Mock
-    AgendaServiceImpl agendaServiceMock;
 
     @InjectMocks
     AgendaServiceImpl agendaService;
@@ -109,7 +101,6 @@ class AgendaServiceUnitaryTests {
         assertTrue(agendas.contains(agendaEntityValid));
     }
 
-    // I will see this test later
     @Test
     @DisplayName("Happy Test: Create Agenda")
     void shouldCreateAgenda() {
@@ -117,9 +108,6 @@ class AgendaServiceUnitaryTests {
         
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.empty());
-        when(userTypeConverter.convertToDatabaseColumn(any())).thenReturn("A");
-        when(categoryConverter.convertToEntityAttribute("S")).thenReturn(Category.SPORTS);
-        when(logService.addLog(anyString(), anyLong(), anyString(), any(), any())).thenReturn(true);
         when(agendaMapperWrapper.dtoToAgenda(agendaDTOValid, Category.SPORTS, finishOn)).thenReturn(agendaEntityValid);
         agendaEntityValid.setId(2L);
         
@@ -176,8 +164,8 @@ class AgendaServiceUnitaryTests {
     @Test
     @DisplayName("Sad Test: Should thrown AuthorizationException")
     void thrownAuthorizationException() {
+        userEntityValid.setUserType(UserType.COMMON);
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
-        when(userTypeConverter.convertToDatabaseColumn(any())).thenReturn("C");
     AuthorizationException thrown = assertThrows(AuthorizationException.class, () -> {
         agendaService.createAgenda(agendaDTOValid);
     });
@@ -189,7 +177,6 @@ class AgendaServiceUnitaryTests {
     @DisplayName("Sad Test: Should Thrown EntityExistsException")
     void thrownEntityExistsException() {
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
-        when(userTypeConverter.convertToDatabaseColumn(any())).thenReturn("A");
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.of(agendaEntityValid));
         
     EntityExistsException thrown = assertThrows(EntityExistsException.class, () -> {

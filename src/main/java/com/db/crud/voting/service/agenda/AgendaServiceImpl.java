@@ -10,20 +10,22 @@ import org.springframework.stereotype.Service;
 
 import com.db.crud.voting.dto.mapper.AgendaMapper;
 import com.db.crud.voting.dto.mapper.AgendaMapperWrapper;
+import com.db.crud.voting.dto.mapper.LogMapper;
 import com.db.crud.voting.dto.mapper.VoteMapper;
 import com.db.crud.voting.dto.request.AddVoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
+import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.response.AddVoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Category;
-import com.db.crud.voting.enums.converters.CategoryConverter;
-import com.db.crud.voting.enums.converters.UserTypeConverter;
+import com.db.crud.voting.enums.UserType;
 import com.db.crud.voting.exception.AgendaEndedException;
 import com.db.crud.voting.exception.AuthorizationException;
 import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.exception.UserAlreadyVotedException;
 import com.db.crud.voting.exception.VoteConflictException;
+import com.db.crud.voting.exception.InvalidEnumException;
 import com.db.crud.voting.model.Agenda;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.AgendaRepository;
@@ -36,22 +38,16 @@ public class AgendaServiceImpl implements AgendaService {
     AgendaRepository agendaRepository;
     UserRepository userRepository;
     LogService logService;
-    UserTypeConverter userTypeConverter;
-    CategoryConverter categoryConverter;
     AgendaMapperWrapper agendaMapperWrapper;
     public AgendaServiceImpl(
             AgendaRepository agendaRepository, 
             UserRepository userRepository, 
-            LogService logService, 
-            CategoryConverter categoryConverter, 
-            UserTypeConverter userTypeConverter,
+            LogService logService,
             AgendaMapperWrapper agendaMapperWrapper
         ) {
         this.agendaRepository = agendaRepository;
         this.logService = logService;
         this.userRepository = userRepository;
-        this.categoryConverter = categoryConverter;
-        this.userTypeConverter = userTypeConverter;
         this.agendaMapperWrapper = agendaMapperWrapper;
     }
 
@@ -83,7 +79,7 @@ public class AgendaServiceImpl implements AgendaService {
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
         User user = findUser(agendaRequest.cpf());
 
-        if (!userTypeConverter.convertToDatabaseColumn(user.getUserType()).equals("A")) {
+        if (user.getUserType() != UserType.ADMIN) {
             throw new AuthorizationException("You don't have authorization to create a agenda!");
         }
 
@@ -92,12 +88,13 @@ public class AgendaServiceImpl implements AgendaService {
             throw new EntityExistsException("This agenda was already created!");
         }
 
-        Category agendaCategory = (categoryConverter.convertToEntityAttribute(agendaRequest.category()));
+        Category agendaCategory = convertCategory(agendaRequest.category());
         LocalDateTime agendaFinish = getFinishDate(agendaRequest.duration());
         Agenda agendaCreated = agendaMapperWrapper.dtoToAgenda(agendaRequest, agendaCategory, agendaFinish);
         agendaRepository.save(agendaCreated);
 
-        logService.addLog("Agenda", agendaCreated.getId(), agendaCreated.getQuestion(), "C", agendaCreated.getCreatedOn());
+        LogObj logObj = buildObj("Agenda", agendaCreated.getId(), agendaCreated.getQuestion(), "C", agendaCreated.getCreatedOn());
+        logService.addLog(logObj);
 
         return AgendaMapper.agendaToDto(agendaCreated);
     }
@@ -118,20 +115,21 @@ public class AgendaServiceImpl implements AgendaService {
         }
         usersVoted.add(user);
 
-        if (addvote.yes() && addvote.no()) {
-            throw new VoteConflictException("A 'yes' and 'no' Votes were contabilized, invalidating Vote!");
-        } else if (addvote.no()) {
+        if (addvote.vote().equals("Y")) {
+            int yVotes = agenda.getYesVotes();
+            agenda.setYesVotes(yVotes+1);
+        } else if (addvote.vote().equals("N")) {
             int nVotes = agenda.getNoVotes();
             agenda.setNoVotes(nVotes+1);
         } else {
-            int yVotes = agenda.getYesVotes();
-            agenda.setYesVotes(yVotes+1);
+            throw new VoteConflictException("Unknown Vote, invalidating Vote!");
         }
 
         agenda.setTotalVotes(agenda.getNoVotes()+agenda.getYesVotes());
         agendaRepository.save(agenda);
         
-        logService.addLog("User", user.getId(), user.getFullname(), "V", LocalDateTime.now());
+        LogObj logObj = buildObj("User", user.getId(), user.getFullname(), "V", LocalDateTime.now());
+        logService.addLog(logObj);
         
         return VoteMapper.voteToDto(true, user.getCpf());
     }
@@ -156,5 +154,24 @@ public class AgendaServiceImpl implements AgendaService {
 
     public LocalDateTime getFinishDate(Integer duration) {
         return (LocalDateTime.now().plusMinutes(duration)).truncatedTo(ChronoUnit.SECONDS);
+    }
+
+    public Category convertCategory(String category) {
+        switch (category) {
+            case "S":
+                return Category.SPORTS;
+            case "T":
+                return Category.TECHNOLOGY;
+            case "O":
+                return Category.OPINION;
+            case "P":
+                return Category.PROGRAMMING;
+            default:
+                throw new InvalidEnumException("This category doesn't Exists!");
+        }
+    }
+
+    public LogObj buildObj(String type, Long id, String question, String operation, LocalDateTime realizedOn) {
+        return LogMapper.logObj(type, id, question, operation, realizedOn);
     }
 }

@@ -9,11 +9,11 @@ import com.db.crud.voting.dto.response.AgendaResponse;
 
 public interface AgendaService {
     
-    public List<AgendaResponse> getEndedAgendas();
+    List<AgendaResponse> getEndedAgendas();
 
-    public List<AgendaResponse> getActiveAgendas();
+    List<AgendaResponse> getActiveAgendas();
 
-    public AgendaResponse createAgenda(AgendaRequest agendaRequest);
+    AgendaResponse createAgenda(AgendaRequest agendaRequest);
 
-    public AddVoteResponse addVote(AddVoteRequest addVoteRequest);
+    AddVoteResponse addVote(AddVoteRequest addVoteRequest);
 }

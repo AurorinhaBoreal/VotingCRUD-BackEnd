@@ -5,7 +5,7 @@ import com.db.crud.voting.dto.response.UserResponse;
 
 public interface UserService {
 
-    public UserResponse getUser(String cpf);
+    UserResponse getUser(String cpf);
 
-    public UserResponse register(UserRequest userRegisterRequest);
+    UserResponse register(UserRequest userRegisterRequest);
 }

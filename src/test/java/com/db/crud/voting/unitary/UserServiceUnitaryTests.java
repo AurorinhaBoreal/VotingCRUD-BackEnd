@@ -3,7 +3,6 @@ package com.db.crud.voting.unitary;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -20,7 +19,6 @@ import com.db.crud.voting.dto.mapper.UserMapperWrapper;
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
 import com.db.crud.voting.enums.UserType;
-import com.db.crud.voting.enums.converters.UserTypeConverter;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.fixture.UserFixture;
 import com.db.crud.voting.model.User;
@@ -33,10 +31,7 @@ class UserServiceUnitaryTests {
     
     @Mock
     UserRepository userRepository;
-
-    @Mock
-    UserTypeConverter userTypeConverter;
-
+    
     @Mock
     UserMapperWrapper userMapperWrapper;
 
@@ -53,7 +48,6 @@ class UserServiceUnitaryTests {
     @DisplayName("Happy Test: Create User")
     void shouldCreateUser() {
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.empty());
-        when(userTypeConverter.convertToEntityAttribute(any())).thenReturn(UserType.ADMIN);
         when(userMapperWrapper.dtoToUser(userDTOValid, UserType.ADMIN)).thenReturn(userEntityValid);
         userEntityValid.setId(1L);
 
@@ -66,7 +60,7 @@ class UserServiceUnitaryTests {
     @Test
     @DisplayName("Happy Test: Get User")
     void shouldGetUser() {
-        when(userRepository.findByCpf("05073122011")).thenReturn(Optional.of(userEntityValid));
+        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
 
         UserResponse user = userService.getUser("05073122011");
 
