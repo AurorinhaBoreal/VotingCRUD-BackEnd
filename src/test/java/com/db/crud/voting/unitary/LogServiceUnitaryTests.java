@@ -4,6 +4,7 @@ import java.util.List;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.db.crud.voting.dto.response.LogResponse;
 import com.db.crud.voting.enums.Operation;
-import com.db.crud.voting.enums.converters.OperationConverter;
 import com.db.crud.voting.fixture.LogFixture;
 import com.db.crud.voting.model.Log;
 import com.db.crud.voting.repository.LogRepository;
@@ -26,9 +26,6 @@ class LogServiceUnitaryTests {
     
     @Mock
     LogRepository logRepository;
-
-    @Mock
-    OperationConverter operationConverter;
 
     @InjectMocks
     LogServiceImpl logService;
@@ -49,7 +46,7 @@ class LogServiceUnitaryTests {
     @Test
     @DisplayName("Happy Test: Should add Log")
     void shouldAddLog() {
-        when(operationConverter.convertToEntityAttribute("C")).thenReturn(Operation.CREATE);
+        when(logService.convertOperation(anyString())).thenReturn(Operation.CREATE);
 
         String objType = logEntityValid2.getObjectType();
         Long objId = logEntityValid2.getId();

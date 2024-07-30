@@ -3,12 +3,9 @@ package com.db.crud.voting.fixture;
 import java.time.LocalDateTime;
 
 import com.db.crud.voting.enums.Operation;
-import com.db.crud.voting.enums.converters.OperationConverter;
 import com.db.crud.voting.model.Log;
 
 public class LogFixture {
-    
-    static OperationConverter operationConverter = new OperationConverter();
 
     public static Log LogEntityValid1() {
         return Log.builder()
