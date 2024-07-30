@@ -16,14 +16,14 @@ import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.response.AddVoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Category;
-import com.db.crud.voting.enums.converters.CategoryConverter;
-import com.db.crud.voting.enums.converters.UserTypeConverter;
+import com.db.crud.voting.enums.UserType;
 import com.db.crud.voting.exception.AgendaEndedException;
 import com.db.crud.voting.exception.AuthorizationException;
 import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.exception.UserAlreadyVotedException;
 import com.db.crud.voting.exception.VoteConflictException;
+import com.db.crud.voting.exception.InvalidEnumException;
 import com.db.crud.voting.model.Agenda;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.AgendaRepository;
@@ -36,22 +36,16 @@ public class AgendaServiceImpl implements AgendaService {
     AgendaRepository agendaRepository;
     UserRepository userRepository;
     LogService logService;
-    UserTypeConverter userTypeConverter;
-    CategoryConverter categoryConverter;
     AgendaMapperWrapper agendaMapperWrapper;
     public AgendaServiceImpl(
             AgendaRepository agendaRepository, 
             UserRepository userRepository, 
-            LogService logService, 
-            CategoryConverter categoryConverter, 
-            UserTypeConverter userTypeConverter,
+            LogService logService,
             AgendaMapperWrapper agendaMapperWrapper
         ) {
         this.agendaRepository = agendaRepository;
         this.logService = logService;
         this.userRepository = userRepository;
-        this.categoryConverter = categoryConverter;
-        this.userTypeConverter = userTypeConverter;
         this.agendaMapperWrapper = agendaMapperWrapper;
     }
 
@@ -83,7 +77,7 @@ public class AgendaServiceImpl implements AgendaService {
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
         User user = findUser(agendaRequest.cpf());
 
-        if (!userTypeConverter.convertToDatabaseColumn(user.getUserType()).equals("A")) {
+        if (user.getUserType() != UserType.ADMIN) {
             throw new AuthorizationException("You don't have authorization to create a agenda!");
         }
 
@@ -92,7 +86,7 @@ public class AgendaServiceImpl implements AgendaService {
             throw new EntityExistsException("This agenda was already created!");
         }
 
-        Category agendaCategory = (categoryConverter.convertToEntityAttribute(agendaRequest.category()));
+        Category agendaCategory = convertCategory(agendaRequest.category());
         LocalDateTime agendaFinish = getFinishDate(agendaRequest.duration());
         Agenda agendaCreated = agendaMapperWrapper.dtoToAgenda(agendaRequest, agendaCategory, agendaFinish);
         agendaRepository.save(agendaCreated);
@@ -156,5 +150,20 @@ public class AgendaServiceImpl implements AgendaService {
 
     public LocalDateTime getFinishDate(Integer duration) {
         return (LocalDateTime.now().plusMinutes(duration)).truncatedTo(ChronoUnit.SECONDS);
+    }
+
+    public Category convertCategory(String category) {
+        switch (category) {
+            case "S":
+                return Category.SPORTS;
+            case "T":
+                return Category.TECHNOLOGY;
+            case "O":
+                return Category.OPINION;
+            case "P":
+                return Category.PROGRAMMING;
+            default:
+                throw new InvalidEnumException("This category doesn't Exists!");
+        }
     }
 }

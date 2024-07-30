@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.db.crud.voting.dto.mapper.LogMapper;
 import com.db.crud.voting.dto.response.LogResponse;
 import com.db.crud.voting.enums.Operation;
-import com.db.crud.voting.enums.converters.OperationConverter;
+import com.db.crud.voting.exception.InvalidEnumException;
 import com.db.crud.voting.model.Log;
 import com.db.crud.voting.repository.LogRepository;
 
@@ -18,13 +18,9 @@ import com.db.crud.voting.repository.LogRepository;
 public class LogServiceImpl implements LogService {
     
     LogRepository logRepository;
-    OperationConverter operationConverter;
 
-    public LogServiceImpl(
-        LogRepository logRepository, 
-        OperationConverter operationConverter) {
+    public LogServiceImpl(LogRepository logRepository) {
         this.logRepository = logRepository;
-        this.operationConverter = operationConverter;
     }
 
     public List<LogResponse> getLogs() {
@@ -39,12 +35,23 @@ public class LogServiceImpl implements LogService {
     }
 
     public boolean addLog(String objectType, Long objectId, String objectInfo, String operationCode, LocalDateTime realizedOn) {
-        Operation operationType = operationConverter.convertToEntityAttribute(operationCode);
+        Operation operationType = convertOperation(operationCode);
         realizedOn = realizedOn.truncatedTo(ChronoUnit.SECONDS);
 
         Log log = LogMapper.infoToLog(objectType, objectId, objectInfo, operationType, realizedOn);
         logRepository.save(log);
         
         return true;
+    }
+
+    public Operation convertOperation(String operation) {
+        switch (operation) {
+            case "C":
+                return Operation.CREATE;            
+            case "V":
+                return Operation.VOTE;
+            default:
+                throw new InvalidEnumException("This is a Invalid Operation!");
+        }
     }
 }
