@@ -7,9 +7,9 @@ import com.db.crud.voting.dto.response.LogResponse;
 
 public interface LogService {
     
-    public List<LogResponse> getLogs();
+    List<LogResponse> getLogs();
 
-    public boolean addLog(
+    boolean addLog(
         String objectType, 
         Long objectId, 
         String objectInfo, 
