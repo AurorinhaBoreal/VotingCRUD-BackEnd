@@ -1,8 +1,9 @@
 spring:
   datasource:
-    password: ${POSTGRES_PASSWORD}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     url: ${DB_URL}
-    username: ${POSTGRES_USER}
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update # Or "create-drop"
