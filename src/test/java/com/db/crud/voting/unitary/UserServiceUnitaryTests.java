@@ -48,7 +48,6 @@ class UserServiceUnitaryTests {
     @DisplayName("Happy Test: Create User")
     void shouldCreateUser() {
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.empty());
-        when(userService.userTypeConverter(anyString())).thenReturn(UserType.ADMIN);
         when(userMapperWrapper.dtoToUser(userDTOValid, UserType.ADMIN)).thenReturn(userEntityValid);
         userEntityValid.setId(1L);
 
@@ -61,7 +60,7 @@ class UserServiceUnitaryTests {
     @Test
     @DisplayName("Happy Test: Get User")
     void shouldGetUser() {
-        when(userRepository.findByCpf("05073122011")).thenReturn(Optional.of(userEntityValid));
+        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
 
         UserResponse user = userService.getUser("05073122011");
 

@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -103,7 +101,6 @@ class AgendaServiceUnitaryTests {
         assertTrue(agendas.contains(agendaEntityValid));
     }
 
-    // I will see this test later
     @Test
     @DisplayName("Happy Test: Create Agenda")
     void shouldCreateAgenda() {
@@ -111,7 +108,6 @@ class AgendaServiceUnitaryTests {
         
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.empty());
-        when(logService.addLog(anyString(), anyLong(), anyString(), any(), any())).thenReturn(true);
         when(agendaMapperWrapper.dtoToAgenda(agendaDTOValid, Category.SPORTS, finishOn)).thenReturn(agendaEntityValid);
         agendaEntityValid.setId(2L);
         
