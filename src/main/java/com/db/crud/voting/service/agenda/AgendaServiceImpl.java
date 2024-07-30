@@ -115,14 +115,14 @@ public class AgendaServiceImpl implements AgendaService {
         }
         usersVoted.add(user);
 
-        if (addvote.yes() && addvote.no()) {
-            throw new VoteConflictException("A 'yes' and 'no' Votes were contabilized, invalidating Vote!");
-        } else if (addvote.no()) {
+        if (addvote.vote().equals("Y")) {
+            int yVotes = agenda.getYesVotes();
+            agenda.setYesVotes(yVotes+1);
+        } else if (addvote.vote().equals("N")) {
             int nVotes = agenda.getNoVotes();
             agenda.setNoVotes(nVotes+1);
         } else {
-            int yVotes = agenda.getYesVotes();
-            agenda.setYesVotes(yVotes+1);
+            throw new VoteConflictException("Unknown Vote, invalidating Vote!");
         }
 
         agenda.setTotalVotes(agenda.getNoVotes()+agenda.getYesVotes());
