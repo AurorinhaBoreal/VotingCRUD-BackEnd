@@ -53,4 +53,9 @@ public class ErrorHandler {
     public ResponseEntity<String> handleErrorAgendaEndedException(AgendaEndedException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
+
+    @ExceptionHandler(InvalidEnumException.class)
+    public ResponseEntity<String> handleInvalidEnumException(InvalidEnumException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
 }

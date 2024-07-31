@@ -3,6 +3,7 @@ package com.db.crud.voting.dto.mapper;
 import org.mapstruct.Mapper;
 import java.time.LocalDateTime;
 
+import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.response.LogResponse;
 import com.db.crud.voting.enums.Operation;
 import com.db.crud.voting.model.Log;
@@ -20,11 +21,21 @@ public interface LogMapper {
             .build();
     }
 
-    static Log infoToLog(String objectType, Long objectId, String objectInfo, Operation operation, LocalDateTime realizedOn) {
+    static Log infoToLog(LogObj logObj, Operation operation, LocalDateTime realizedOn) {
         return Log.builder()
-            .objectType(objectType)
-            .objectId(objectId)
-            .objectInfo(objectInfo)
+            .objectType(logObj.objType())
+            .objectId(logObj.objId())
+            .objectInfo(logObj.objInfo())
+            .operation(operation)
+            .realizedOn(realizedOn)
+            .build();
+    }
+
+    static LogObj logObj(String objectType, Long objectId, String objectInfo, String operation, LocalDateTime realizedOn) {
+        return LogObj.builder()
+            .objType(objectType)
+            .objId(objectId)
+            .objInfo(objectInfo)
             .operation(operation)
             .realizedOn(realizedOn)
             .build();

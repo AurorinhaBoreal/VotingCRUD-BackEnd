@@ -8,8 +8,7 @@ public class VoteFixture {
         return AddVoteRequest.builder()
             .cpf("05073122011")
             .question("I should bet on Palmeiras?")
-            .yes(true)
-            .no(false)
+            .vote("Y")
             .build();
     }
 
@@ -17,8 +16,7 @@ public class VoteFixture {
         return AddVoteRequest.builder()
             .cpf("05073122011")
             .question("I should bet on Palmeiras?")
-            .yes(false)
-            .no(true)
+            .vote("N")
             .build();
     }
 }

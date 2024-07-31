@@ -10,6 +10,7 @@ public record AddVoteRequest(
 
     @NotBlank(message = "Inform the user who voted")
     String cpf,
-    boolean yes,
-    boolean no) {
+
+    @NotBlank(message = "Inform the vote")
+    String vote) {
 }

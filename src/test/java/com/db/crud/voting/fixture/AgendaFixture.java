@@ -5,12 +5,9 @@ import java.time.LocalDateTime;
 import com.db.crud.voting.dto.mapper.AgendaMapper;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.enums.Category;
-import com.db.crud.voting.enums.converters.CategoryConverter;
 import com.db.crud.voting.model.Agenda;
 
 public class AgendaFixture {
-
-    static CategoryConverter categoryConverter = new CategoryConverter();
 
     public static AgendaRequest AgendaDTOValid() {
         return AgendaRequest.builder()
@@ -39,19 +36,19 @@ public class AgendaFixture {
     }
 
     public static Agenda AgendaEntityValid() {
-        Category category = categoryConverter.convertToEntityAttribute("S");
+        Category category = Category.SPORTS;
         LocalDateTime finishOn = LocalDateTime.now().plusMinutes(AgendaDTOValid().duration());
         return AgendaMapper.dtoToAgenda(AgendaDTOValid(), category, finishOn);
     }
 
     public static Agenda AgendaEntityValid2() {
-        Category category = categoryConverter.convertToEntityAttribute("T");
+        Category category = Category.TECHNOLOGY;
         LocalDateTime finishOn = LocalDateTime.now().plusMinutes(AgendaDTOValid().duration());
         return AgendaMapper.dtoToAgenda(AgendaDTOValid2(), category, finishOn);
     }
 
     public static Agenda AgendaEntityInvalid() {
-        Category category = categoryConverter.convertToEntityAttribute("");
+        Category category = Category.PROGRAMMING;
         LocalDateTime finishOn = LocalDateTime.now().plusMinutes(AgendaDTOValid().duration());
         return AgendaMapper.dtoToAgenda(AgendaDTOInvalid(), category, finishOn);
     }

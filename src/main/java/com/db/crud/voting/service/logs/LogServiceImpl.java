@@ -8,9 +8,10 @@ import java.time.temporal.ChronoUnit;
 import org.springframework.stereotype.Service;
 
 import com.db.crud.voting.dto.mapper.LogMapper;
+import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.response.LogResponse;
 import com.db.crud.voting.enums.Operation;
-import com.db.crud.voting.enums.converters.OperationConverter;
+import com.db.crud.voting.exception.InvalidEnumException;
 import com.db.crud.voting.model.Log;
 import com.db.crud.voting.repository.LogRepository;
 
@@ -18,13 +19,9 @@ import com.db.crud.voting.repository.LogRepository;
 public class LogServiceImpl implements LogService {
     
     LogRepository logRepository;
-    OperationConverter operationConverter;
 
-    public LogServiceImpl(
-        LogRepository logRepository, 
-        OperationConverter operationConverter) {
+    public LogServiceImpl(LogRepository logRepository) {
         this.logRepository = logRepository;
-        this.operationConverter = operationConverter;
     }
 
     public List<LogResponse> getLogs() {
@@ -38,13 +35,24 @@ public class LogServiceImpl implements LogService {
         return logResponse;
     }
 
-    public boolean addLog(String objectType, Long objectId, String objectInfo, String operationCode, LocalDateTime realizedOn) {
-        Operation operationType = operationConverter.convertToEntityAttribute(operationCode);
-        realizedOn = realizedOn.truncatedTo(ChronoUnit.SECONDS);
+    public boolean addLog(LogObj logDto) {
+        Operation operation = convertOperation(logDto.operation());
+        LocalDateTime realizedOn = logDto.realizedOn().truncatedTo(ChronoUnit.SECONDS);
 
-        Log log = LogMapper.infoToLog(objectType, objectId, objectInfo, operationType, realizedOn);
+        Log log = LogMapper.infoToLog(logDto, operation, realizedOn);
         logRepository.save(log);
         
         return true;
+    }
+
+    public Operation convertOperation(String operation) {
+        switch (operation) {
+            case "C":
+                return Operation.CREATE;            
+            case "V":
+                return Operation.VOTE;
+            default:
+                throw new InvalidEnumException("This is a Invalid Operation!");
+        }
     }
 }
