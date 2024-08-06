@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/agenda")
-@CrossOrigin(origins = {"http://localhost:3000/", "https://votacao-front.onrender.com"})
+@CrossOrigin(origins = {"http://localhost:3000/", "http://localhost:5173/", "https://votacao-front.onrender.com"})
 public class AgendaController {
     
     private final AgendaService agendaService;
