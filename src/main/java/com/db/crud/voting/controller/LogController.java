@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/log")
-@CrossOrigin(origins = {"http://localhost:3000/", "https://votacao-front.onrender.com"})
+@CrossOrigin(origins = {"http://localhost:3000/", "http://localhost:5173/", "https://votacao-front.onrender.com"})
 public class LogController {
     
     
