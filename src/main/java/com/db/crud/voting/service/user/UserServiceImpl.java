@@ -32,9 +32,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse register(UserRequest userRegisterDto) {
         Optional<User> user = userRepository.findByCpf(userRegisterDto.cpf());
-        if (user.isPresent()) {
-            throw new EntityExistsException("A person with this cpf already exists!");
-        }
+        verifyUserPresent(user);
         UserType userType = userTypeConverter(userRegisterDto.userType());
         User userRegistered = userMapperWrapper.dtoToUser(userRegisterDto, userType);
         userRepository.save(userRegistered);
@@ -43,6 +41,12 @@ public class UserServiceImpl implements UserService {
         logService.addLog(logObj);
         
         return UserMapper.userToDto(userRegistered);
+    }
+
+    private void verifyUserPresent(Optional<User> user) {
+        if (user.isPresent()) {
+            throw new EntityExistsException("A person with this cpf already exists!");
+        }
     }
 
     @Override
