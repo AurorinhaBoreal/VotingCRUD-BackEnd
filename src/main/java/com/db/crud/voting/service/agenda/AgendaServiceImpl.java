@@ -32,24 +32,16 @@ import com.db.crud.voting.repository.AgendaRepository;
 import com.db.crud.voting.repository.UserRepository;
 import com.db.crud.voting.service.logs.LogService;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class AgendaServiceImpl implements AgendaService {
     
     AgendaRepository agendaRepository;
     UserRepository userRepository;
     LogService logService;
     AgendaMapperWrapper agendaMapperWrapper;
-    public AgendaServiceImpl(
-            AgendaRepository agendaRepository, 
-            UserRepository userRepository, 
-            LogService logService,
-            AgendaMapperWrapper agendaMapperWrapper
-        ) {
-        this.agendaRepository = agendaRepository;
-        this.logService = logService;
-        this.userRepository = userRepository;
-        this.agendaMapperWrapper = agendaMapperWrapper;
-    }
 
     @Override
     public List<AgendaResponse> getEndedAgendas() {

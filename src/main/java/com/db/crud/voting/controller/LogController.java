@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.db.crud.voting.dto.response.LogResponse;
 import com.db.crud.voting.service.logs.LogService;
 
+import lombok.AllArgsConstructor;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +18,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/log")
 @CrossOrigin(origins = {"http://localhost:3000/", "http://localhost:5173/", "https://votacao-front.onrender.com"})
 public class LogController {
     
     
     private final LogService logService;
-
-    public LogController(LogService logService) {
-        this.logService = logService;
-    }
 
     @GetMapping
     public ResponseEntity<List<LogResponse>> getLogs() {

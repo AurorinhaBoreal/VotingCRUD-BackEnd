@@ -10,6 +10,7 @@ import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.service.agenda.AgendaService;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 
@@ -21,15 +22,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/agenda")
 @CrossOrigin(origins = {"http://localhost:3000/", "http://localhost:5173/", "https://votacao-front.onrender.com"})
 public class AgendaController {
     
     private final AgendaService agendaService;
-
-    public AgendaController(AgendaService agendaService) {
-        this.agendaService = agendaService;
-    }
 
     @GetMapping
     public ResponseEntity<List<AgendaResponse>> getEndedAgendas() {

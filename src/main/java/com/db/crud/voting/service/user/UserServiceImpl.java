@@ -19,21 +19,15 @@ import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.UserRepository;
 import com.db.crud.voting.service.logs.LogService;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
     
     UserRepository userRepository;
     LogService logService;
     UserMapperWrapper userMapperWrapper;
-
-    public UserServiceImpl(
-        UserRepository userRepository, 
-        LogService logService,
-        UserMapperWrapper userMapperWrapper) {
-        this.userRepository = userRepository;
-        this.logService = logService;
-        this.userMapperWrapper = userMapperWrapper;
-    }
 
     @Override
     public UserResponse register(UserRequest userRegisterDto) {

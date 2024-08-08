@@ -15,14 +15,13 @@ import com.db.crud.voting.exception.InvalidEnumException;
 import com.db.crud.voting.model.Log;
 import com.db.crud.voting.repository.LogRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class LogServiceImpl implements LogService {
     
     LogRepository logRepository;
-
-    public LogServiceImpl(LogRepository logRepository) {
-        this.logRepository = logRepository;
-    }
 
     @Override
     public List<LogResponse> getLogs() {
