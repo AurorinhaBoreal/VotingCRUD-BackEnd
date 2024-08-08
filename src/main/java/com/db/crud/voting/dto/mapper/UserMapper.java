@@ -4,7 +4,6 @@ import org.mapstruct.Mapper;
 
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
-import com.db.crud.voting.enums.UserType;
 import com.db.crud.voting.model.User;
 
 @Mapper(componentModel = "spring")
@@ -18,9 +17,9 @@ public interface UserMapper {
                 .build();
     }
 
-    static User dtoToUser(UserRequest userDTO, UserType userType) {
+    static User dtoToUser(UserRequest userDTO) {
         return User.builder()
-                .userType(userType)
+                .userType(userDTO.userType())
                 .firstName(userDTO.firstName())
                 .surname(userDTO.surname())
                 .cpf(userDTO.cpf())

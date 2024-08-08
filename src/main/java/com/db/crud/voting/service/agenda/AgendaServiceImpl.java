@@ -16,7 +16,7 @@ import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.response.AddVoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
-import com.db.crud.voting.enums.Category;
+import com.db.crud.voting.enums.Operation;
 import com.db.crud.voting.enums.UserType;
 import com.db.crud.voting.exception.AgendaEndedException;
 import com.db.crud.voting.exception.AuthorizationException;
@@ -24,7 +24,6 @@ import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.exception.UserAlreadyVotedException;
 import com.db.crud.voting.exception.VoteConflictException;
-import com.db.crud.voting.exception.InvalidEnumException;
 import com.db.crud.voting.model.Agenda;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.AgendaRepository;
@@ -77,12 +76,11 @@ public class AgendaServiceImpl implements AgendaService {
 
         verifyAgendaPresent(agenda);
 
-        Category agendaCategory = convertCategory(agendaRequest.category());
         LocalDateTime agendaFinish = getFinishDate(agendaRequest.duration());
-        Agenda agendaCreated = agendaMapperWrapper.dtoToAgenda(agendaRequest, agendaCategory, agendaFinish);
+        Agenda agendaCreated = agendaMapperWrapper.dtoToAgenda(agendaRequest, agendaFinish);
         agendaRepository.save(agendaCreated);
 
-        LogObj logObj = buildObj("Agenda", agendaCreated.getId(), agendaCreated.getQuestion(), "C", agendaCreated.getCreatedOn());
+        LogObj logObj = buildObj("Agenda", agendaCreated.getId(), agendaCreated.getQuestion(), Operation.CREATE, agendaCreated.getCreatedOn());
         logService.addLog(logObj);
 
         return AgendaMapper.agendaToDto(agendaCreated);
@@ -116,7 +114,7 @@ public class AgendaServiceImpl implements AgendaService {
         agenda.setTotalVotes(agenda.getNoVotes()+agenda.getYesVotes());
         agendaRepository.save(agenda);
         
-        LogObj logObj = buildObj("User", user.getId(), user.getFullname(), "V", LocalDateTime.now());
+        LogObj logObj = buildObj("User", user.getId(), user.getFullname(), Operation.VOTE, LocalDateTime.now());
         logService.addLog(logObj);
         
         return VoteMapper.voteToDto(true, user.getCpf());
@@ -163,22 +161,7 @@ public class AgendaServiceImpl implements AgendaService {
         return (LocalDateTime.now().plusMinutes(duration)).truncatedTo(ChronoUnit.SECONDS);
     }
 
-    private Category convertCategory(String category) {
-        switch (category) {
-            case "S":
-                return Category.SPORTS;
-            case "T":
-                return Category.TECHNOLOGY;
-            case "O":
-                return Category.OPINION;
-            case "P":
-                return Category.PROGRAMMING;
-            default:
-                throw new InvalidEnumException("This category doesn't Exists!");
-        }
-    }
-
-    private LogObj buildObj(String type, Long id, String question, String operation, LocalDateTime realizedOn) {
+    private LogObj buildObj(String type, Long id, String question, Operation operation, LocalDateTime realizedOn) {
         return LogMapper.logObj(type, id, question, operation, realizedOn);
     }
 }

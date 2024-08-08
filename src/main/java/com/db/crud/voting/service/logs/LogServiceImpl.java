@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import com.db.crud.voting.dto.mapper.LogMapper;
 import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.response.LogResponse;
-import com.db.crud.voting.enums.Operation;
-import com.db.crud.voting.exception.InvalidEnumException;
 import com.db.crud.voting.model.Log;
 import com.db.crud.voting.repository.LogRepository;
 
@@ -30,23 +28,11 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public boolean addLog(LogObj logDto) {
-        Operation operation = convertOperation(logDto.operation());
         LocalDateTime realizedOn = logDto.realizedOn().truncatedTo(ChronoUnit.SECONDS);
 
-        Log log = LogMapper.infoToLog(logDto, operation, realizedOn);
+        Log log = LogMapper.infoToLog(logDto, realizedOn);
         logRepository.save(log);
         
         return true;
-    }
-
-    private Operation convertOperation(String operation) {
-        switch (operation) {
-            case "C":
-                return Operation.CREATE;            
-            case "V":
-                return Operation.VOTE;
-            default:
-                throw new InvalidEnumException("This is a Invalid Operation!");
-        }
     }
 }

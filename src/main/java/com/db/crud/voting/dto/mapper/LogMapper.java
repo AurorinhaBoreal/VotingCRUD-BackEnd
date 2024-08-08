@@ -21,17 +21,17 @@ public interface LogMapper {
             .build();
     }
 
-    static Log infoToLog(LogObj logObj, Operation operation, LocalDateTime realizedOn) {
+    static Log infoToLog(LogObj logObj, LocalDateTime realizedOn) {
         return Log.builder()
             .objectType(logObj.objType())
             .objectId(logObj.objId())
             .objectInfo(logObj.objInfo())
-            .operation(operation)
+            .operation(logObj.operation())
             .realizedOn(realizedOn)
             .build();
     }
 
-    static LogObj logObj(String objectType, Long objectId, String objectInfo, String operation, LocalDateTime realizedOn) {
+    static LogObj logObj(String objectType, Long objectId, String objectInfo, Operation operation, LocalDateTime realizedOn) {
         return LogObj.builder()
             .objType(objectType)
             .objId(objectId)
