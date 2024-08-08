@@ -44,14 +44,16 @@ public class AgendaServiceImpl implements AgendaService {
     LocalDateTime actualDate;
     
     @Override
-    public void finishAgenda() {
-        actualDate = LocalDateTime.now();
+    public String finishAgenda() {
+        actualDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         agendaRepository.findByHasEnded(false).forEach(agenda -> {
             LocalDateTime actualDate = LocalDateTime.now();
             if (actualDate.isAfter(agenda.getFinishOn())) {
-                finishAgenda(agenda);
+                agendaRepository.finishAgenda(agenda.getId());
+                agendaRepository.save(agenda);
             }
         });
+        return "Agenda Ended!";
     }
 
     @Override
@@ -70,14 +72,10 @@ public class AgendaServiceImpl implements AgendaService {
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
         User user = findUser(agendaRequest.cpf());
 
-        if (user.getUserType() != UserType.ADMIN) {
-            throw new AuthorizationException("You don't have authorization to create a agenda!");
-        }
-
+        authenticateUserAdmin(user.getUserType());
         Optional<Agenda> agenda = agendaRepository.findByQuestion(agendaRequest.question());
-        if (agenda.isPresent()) {
-            throw new EntityExistsException("This agenda was already created!");
-        }
+
+        verifyAgendaPresent(agenda);
 
         Category agendaCategory = convertCategory(agendaRequest.category());
         LocalDateTime agendaFinish = getFinishDate(agendaRequest.duration());
@@ -90,32 +88,30 @@ public class AgendaServiceImpl implements AgendaService {
         return AgendaMapper.agendaToDto(agendaCreated);
     }
 
+    private void authenticateUserAdmin(UserType userType) {
+        if (userType != UserType.ADMIN) {
+            throw new AuthorizationException("You don't have authorization to create a agenda!");
+        }
+    }
+
+    private void verifyAgendaPresent(Optional<Agenda> agenda) {
+        if (agenda.isPresent()) {
+            throw new EntityExistsException("This agenda was already created!");
+        }
+    }
+
     @Override
     public AddVoteResponse addVote(AddVoteRequest addvote) {
-        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         User user = findUser(addvote.cpf());
         Agenda agenda = findAgenda(addvote.question());
-
-        if (now.isAfter(agenda.getFinishOn())) finishAgenda(agenda);
         
-        if (agenda.isHasEnded()) {
-            throw new AgendaEndedException("This agenda already ended!");
-        }
-        List<User> usersVoted = agenda.getUsersVoted();
-        if (usersVoted.contains(user)) {
-            throw new UserAlreadyVotedException("This user already voted!");
-        }
-        usersVoted.add(user);
+        veifyAgendaFinished(agenda);
 
-        if (addvote.vote().equals("Y")) {
-            int yVotes = agenda.getYesVotes();
-            agenda.setYesVotes(yVotes+1);
-        } else if (addvote.vote().equals("N")) {
-            int nVotes = agenda.getNoVotes();
-            agenda.setNoVotes(nVotes+1);
-        } else {
-            throw new VoteConflictException("Unknown Vote, invalidating Vote!");
-        }
+        List<User> usersVoted = agenda.getUsersVoted();
+
+        verifyUserVoted(user, usersVoted);
+
+        sortVote(addvote.vote(), agenda);
 
         agenda.setTotalVotes(agenda.getNoVotes()+agenda.getYesVotes());
         agendaRepository.save(agenda);
@@ -126,10 +122,29 @@ public class AgendaServiceImpl implements AgendaService {
         return VoteMapper.voteToDto(true, user.getCpf());
     }
 
-    public String finishAgenda(Agenda agenda) {
-        agendaRepository.finishAgenda(agenda.getId());
-        agendaRepository.save(agenda);
-        return "Agenda Ended!";
+    private void veifyAgendaFinished(Agenda agenda) {
+        if (agenda.isHasEnded()) {
+            throw new AgendaEndedException("This agenda already ended!");
+        }
+    }
+
+    private void verifyUserVoted(User user, List<User> usersVoted) {
+        if (usersVoted.contains(user)) {
+            throw new UserAlreadyVotedException("This user already voted!");
+        }
+        usersVoted.add(user);
+    }
+
+    private void sortVote(String vote, Agenda agenda) {
+        if (vote.equals("Y")) {
+            int yVotes = agenda.getYesVotes();
+            agenda.setYesVotes(yVotes+1);
+        } else if (vote.equals("N")) {
+            int nVotes = agenda.getNoVotes();
+            agenda.setNoVotes(nVotes+1);
+        } else {
+            throw new VoteConflictException("Unknown Vote, invalidating Vote!");
+        }
     }
 
     private Agenda findAgenda(String question) {
