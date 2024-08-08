@@ -1,7 +1,6 @@
 package com.db.crud.voting.service.agenda;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -42,32 +41,29 @@ public class AgendaServiceImpl implements AgendaService {
     UserRepository userRepository;
     LogService logService;
     AgendaMapperWrapper agendaMapperWrapper;
+    LocalDateTime actualDate;
+    
+    @Override
+    public void finishAgenda() {
+        actualDate = LocalDateTime.now();
+        agendaRepository.findByHasEnded(false).forEach(agenda -> {
+            LocalDateTime actualDate = LocalDateTime.now();
+            if (actualDate.isAfter(agenda.getFinishOn())) {
+                finishAgenda(agenda);
+            }
+        });
+    }
 
     @Override
     public List<AgendaResponse> getEndedAgendas() {
-        List<AgendaResponse> agendaResponse = new ArrayList<>();
-        List<Agenda> agendas = agendaRepository.findByHasEnded(true);
-
-        agendas.forEach(agenda -> 
-            agendaResponse.add(AgendaMapper.agendaToDto(agenda))
-        );
-
-        return agendaResponse;
+        return agendaRepository.findByHasEnded(true)
+            .stream().map((agenda) -> AgendaMapper.agendaToDto(agenda)).toList();
     }
 
     @Override
     public List<AgendaResponse> getActiveAgendas() {
-        List<AgendaResponse> agendaResponse = new ArrayList<>();
-        List<Agenda> agendas = agendaRepository.findByHasEnded(false);
-
-        agendas.forEach(agenda -> {
-            LocalDateTime actualDate = LocalDateTime.now();
-            if (actualDate.isAfter(agenda.getFinishOn())) {
-                finishAgenda(agenda);
-            } else agendaResponse.add(AgendaMapper.agendaToDto(agenda));
-        });
-        
-        return agendaResponse;
+        return agendaRepository.findByHasEnded(false)
+            .stream().map((agenda) -> AgendaMapper.agendaToDto(agenda)).toList();
     }
 
     @Override

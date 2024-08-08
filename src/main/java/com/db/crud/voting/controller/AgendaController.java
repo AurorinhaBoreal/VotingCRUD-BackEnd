@@ -31,12 +31,14 @@ public class AgendaController {
 
     @GetMapping
     public ResponseEntity<List<AgendaResponse>> getEndedAgendas() {
+        agendaService.finishAgenda();
         var body = agendaService.getEndedAgendas();
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }
     
     @GetMapping("/active")
     public ResponseEntity<List<AgendaResponse>> getActiveAgendas() {
+        agendaService.finishAgenda();
         var body = agendaService.getActiveAgendas();
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }

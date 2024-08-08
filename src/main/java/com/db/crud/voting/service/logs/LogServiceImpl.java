@@ -1,7 +1,6 @@
 package com.db.crud.voting.service.logs;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -25,14 +24,8 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public List<LogResponse> getLogs() {
-        List<LogResponse> logResponse = new ArrayList<>();
-        List<Log> logs = logRepository.findAll();
-
-        logs.forEach(log ->
-            logResponse.add(LogMapper.logToDto(log))
-        );
-
-        return logResponse;
+        return logRepository.findAll()
+            .stream().map((log) -> LogMapper.logToDto(log)).toList();
     }
 
     @Override
