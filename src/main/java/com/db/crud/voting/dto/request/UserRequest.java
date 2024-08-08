@@ -5,11 +5,12 @@ import org.hibernate.validator.constraints.br.CPF;
 import com.db.crud.voting.enums.UserType;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
 public record UserRequest(
-        @NotBlank(message = "You need to select a UserType")
+        @NotNull(message = "You need to select a UserType")
         UserType userType,
 
         @NotBlank(message = "Must inform a first name")

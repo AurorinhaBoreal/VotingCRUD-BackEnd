@@ -40,13 +40,11 @@ public class AgendaServiceImpl implements AgendaService {
     UserRepository userRepository;
     LogService logService;
     AgendaMapperWrapper agendaMapperWrapper;
-    LocalDateTime actualDate;
     
     @Override
     public String finishAgenda() {
-        actualDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         agendaRepository.findByHasEnded(false).forEach(agenda -> {
-            LocalDateTime actualDate = LocalDateTime.now();
+            LocalDateTime actualDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
             if (actualDate.isAfter(agenda.getFinishOn())) {
                 agendaRepository.finishAgenda(agenda.getId());
                 agendaRepository.save(agenda);
@@ -107,7 +105,7 @@ public class AgendaServiceImpl implements AgendaService {
 
         List<User> usersVoted = agenda.getUsersVoted();
 
-        verifyUserVoted(user, usersVoted);
+        verifyAndAddUserVoted(user, usersVoted);
 
         sortVote(addvote.vote(), agenda);
 
@@ -126,7 +124,7 @@ public class AgendaServiceImpl implements AgendaService {
         }
     }
 
-    private void verifyUserVoted(User user, List<User> usersVoted) {
+    private void verifyAndAddUserVoted(User user, List<User> usersVoted) {
         if (usersVoted.contains(user)) {
             throw new UserAlreadyVotedException("This user already voted!");
         }
