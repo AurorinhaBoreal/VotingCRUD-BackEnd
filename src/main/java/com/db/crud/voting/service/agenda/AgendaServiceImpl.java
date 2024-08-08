@@ -51,6 +51,7 @@ public class AgendaServiceImpl implements AgendaService {
         this.agendaMapperWrapper = agendaMapperWrapper;
     }
 
+    @Override
     public List<AgendaResponse> getEndedAgendas() {
         List<AgendaResponse> agendaResponse = new ArrayList<>();
         List<Agenda> agendas = agendaRepository.findByHasEnded(true);
@@ -62,6 +63,7 @@ public class AgendaServiceImpl implements AgendaService {
         return agendaResponse;
     }
 
+    @Override
     public List<AgendaResponse> getActiveAgendas() {
         List<AgendaResponse> agendaResponse = new ArrayList<>();
         List<Agenda> agendas = agendaRepository.findByHasEnded(false);
@@ -76,6 +78,7 @@ public class AgendaServiceImpl implements AgendaService {
         return agendaResponse;
     }
 
+    @Override
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
         User user = findUser(agendaRequest.cpf());
 
@@ -99,6 +102,7 @@ public class AgendaServiceImpl implements AgendaService {
         return AgendaMapper.agendaToDto(agendaCreated);
     }
 
+    @Override
     public AddVoteResponse addVote(AddVoteRequest addvote) {
         LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         User user = findUser(addvote.cpf());
@@ -140,23 +144,23 @@ public class AgendaServiceImpl implements AgendaService {
         return "Agenda Ended!";
     }
 
-    public Agenda findAgenda(String question) {
+    private Agenda findAgenda(String question) {
         return agendaRepository.findByQuestion(question).orElseThrow(
             () -> new CannotFindEntityException("Cannot find agenda with question: "+question)
         );
     }
 
-    public User findUser(String cpf) {
+    private User findUser(String cpf) {
         return userRepository.findByCpf(cpf).orElseThrow(
             () -> new CannotFindEntityException("The user with cpf: "+cpf+" isn't registered!")
         );
     }
 
-    public LocalDateTime getFinishDate(Integer duration) {
+    private LocalDateTime getFinishDate(Integer duration) {
         return (LocalDateTime.now().plusMinutes(duration)).truncatedTo(ChronoUnit.SECONDS);
     }
 
-    public Category convertCategory(String category) {
+    private Category convertCategory(String category) {
         switch (category) {
             case "S":
                 return Category.SPORTS;
@@ -171,7 +175,7 @@ public class AgendaServiceImpl implements AgendaService {
         }
     }
 
-    public LogObj buildObj(String type, Long id, String question, String operation, LocalDateTime realizedOn) {
+    private LogObj buildObj(String type, Long id, String question, String operation, LocalDateTime realizedOn) {
         return LogMapper.logObj(type, id, question, operation, realizedOn);
     }
 }

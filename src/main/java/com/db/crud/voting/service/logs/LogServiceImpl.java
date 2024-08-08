@@ -24,6 +24,7 @@ public class LogServiceImpl implements LogService {
         this.logRepository = logRepository;
     }
 
+    @Override
     public List<LogResponse> getLogs() {
         List<LogResponse> logResponse = new ArrayList<>();
         List<Log> logs = logRepository.findAll();
@@ -35,6 +36,7 @@ public class LogServiceImpl implements LogService {
         return logResponse;
     }
 
+    @Override
     public boolean addLog(LogObj logDto) {
         Operation operation = convertOperation(logDto.operation());
         LocalDateTime realizedOn = logDto.realizedOn().truncatedTo(ChronoUnit.SECONDS);
@@ -45,7 +47,7 @@ public class LogServiceImpl implements LogService {
         return true;
     }
 
-    public Operation convertOperation(String operation) {
+    private Operation convertOperation(String operation) {
         switch (operation) {
             case "C":
                 return Operation.CREATE;            

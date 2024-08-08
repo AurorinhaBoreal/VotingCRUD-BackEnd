@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
         this.userMapperWrapper = userMapperWrapper;
     }
 
+    @Override
     public UserResponse register(UserRequest userRegisterDto) {
         Optional<User> user = userRepository.findByCpf(userRegisterDto.cpf());
         if (user.isPresent()) {
@@ -50,12 +51,13 @@ public class UserServiceImpl implements UserService {
         return UserMapper.userToDto(userRegistered);
     }
 
+    @Override
     public UserResponse getUser(String cpf) {
         User user = userRepository.findByCpf(cpf).orElseThrow(() -> new CannotFindEntityException("Cannot find this User"));
         return UserMapper.userToDto(user);
     }
 
-    public UserType userTypeConverter(String userType) {
+    private UserType userTypeConverter(String userType) {
         switch (userType) {
             case "A":
                 return UserType.ADMIN;
@@ -66,7 +68,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public LogObj buildObj(String type, Long id, String name, String operation, LocalDateTime realizedOn) {
+    private LogObj buildObj(String type, Long id, String name, String operation, LocalDateTime realizedOn) {
         return LogMapper.logObj(type, id, name, operation, realizedOn);
     }
 }
