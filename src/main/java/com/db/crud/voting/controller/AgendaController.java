@@ -51,6 +51,7 @@ public class AgendaController {
 
     @PostMapping("/vote")
     public ResponseEntity<AddVoteResponse> voteAgenda(@RequestBody @Valid AddVoteRequest addVoteRequest) {
+        agendaService.finishAgenda();
         var body = agendaService.addVote(addVoteRequest);
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }
