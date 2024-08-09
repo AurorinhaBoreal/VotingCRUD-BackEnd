@@ -1,6 +1,7 @@
 package com.db.crud.voting.dto.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
@@ -9,20 +10,8 @@ import com.db.crud.voting.model.User;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    static UserResponse userToDto(User user) {
-        return UserResponse.builder()
-                .userType(user.getUserType())
-                .firstName(user.getFirstName())
-                .surname(user.getSurname())
-                .build();
-    }
+    UserResponse userToDto(User user);
 
-    static User dtoToUser(UserRequest userDTO) {
-        return User.builder()
-                .userType(userDTO.userType())
-                .firstName(userDTO.firstName())
-                .surname(userDTO.surname())
-                .cpf(userDTO.cpf())
-                .build();
-    }
+    @Mapping(target = "id", ignore = true)
+    User dtoToUser(UserRequest userDTO);
 }

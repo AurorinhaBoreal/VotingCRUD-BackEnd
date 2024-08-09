@@ -1,6 +1,8 @@
 package com.db.crud.voting.dto.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
 import java.time.LocalDateTime;
 
 import com.db.crud.voting.dto.request.LogObj;
@@ -11,33 +13,15 @@ import com.db.crud.voting.model.Log;
 @Mapper(componentModel = "spring")
 public interface LogMapper {
     
-    static LogResponse logToDto(Log log) {
-        return LogResponse.builder()
-            .objectType(log.getObjectType())
-            .objectInfo(log.getObjectInfo())
-            .objectId(log.getObjectId())
-            .operation(log.getOperation())
-            .realizedOn(log.getRealizedOn())
-            .build();
-    }
+    LogResponse logToDto(Log log);
 
-    static Log infoToLog(LogObj logObj, LocalDateTime realizedOn) {
-        return Log.builder()
-            .objectType(logObj.objType())
-            .objectId(logObj.objId())
-            .objectInfo(logObj.objInfo())
-            .operation(logObj.operation())
-            .realizedOn(realizedOn)
-            .build();
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "logObj.objType", target = "objectType")
+    @Mapping(source = "logObj.objId", target = "objectId")
+    @Mapping(source = "logObj.objInfo", target = "objectInfo")
+    @Mapping(source = "logObj.operation", target = "operation")
+    @Mapping(source = "realizedOn", target = "realizedOn")
+    Log infoToLog(LogObj logObj, LocalDateTime realizedOn);
 
-    static LogObj logObj(String objectType, Long objectId, String objectInfo, Operation operation, LocalDateTime realizedOn) {
-        return LogObj.builder()
-            .objType(objectType)
-            .objId(objectId)
-            .objInfo(objectInfo)
-            .operation(operation)
-            .realizedOn(realizedOn)
-            .build();
-    }
+    LogObj logObj(String objType, Long objId, String objInfo, Operation operation, LocalDateTime realizedOn);
 }

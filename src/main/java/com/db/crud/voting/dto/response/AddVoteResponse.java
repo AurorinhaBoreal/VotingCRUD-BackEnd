@@ -4,6 +4,5 @@ import lombok.Builder;
 
 @Builder
 public record AddVoteResponse(
-    boolean voteContabilized,
     String userCpf) {
 }

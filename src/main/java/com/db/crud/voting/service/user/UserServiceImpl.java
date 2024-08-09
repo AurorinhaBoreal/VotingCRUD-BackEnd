@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     LogService logService;
     UserMapper userMapper;
+    LogMapper logMapper;
 
     @Override
     public UserResponse register(UserRequest userRegisterDto) {
@@ -60,6 +61,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private LogObj buildObj(String type, Long id, String name, Operation operation, LocalDateTime realizedOn) {
-        return LogMapper.logObj(type, id, name, operation, realizedOn);
+        return logMapper.logObj(type, id, name, operation, realizedOn);
     }
 }

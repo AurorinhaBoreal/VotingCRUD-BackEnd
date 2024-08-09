@@ -42,6 +42,7 @@ public class AgendaServiceImpl implements AgendaService {
     LogService logService;
     AgendaMapper agendaMapper;
     VoteMapper voteMapper;
+    LogMapper logMapper;
     
     @Override
     public String finishAgenda() {
@@ -176,6 +177,6 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     private LogObj buildObj(String type, Long id, String question, Operation operation, LocalDateTime realizedOn) {
-        return LogMapper.logObj(type, id, question, operation, realizedOn);
+        return logMapper.logObj(type, id, question, operation, realizedOn);
     }
 }
