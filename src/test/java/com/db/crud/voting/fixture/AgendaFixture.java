@@ -3,6 +3,7 @@ package com.db.crud.voting.fixture;
 import java.time.LocalDateTime;
 
 import com.db.crud.voting.dto.mapper.AgendaMapper;
+import com.db.crud.voting.dto.mapper.AgendaMapperImpl;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.enums.Category;
 import com.db.crud.voting.model.Agenda;
@@ -11,7 +12,7 @@ public class AgendaFixture {
 
     public static AgendaRequest AgendaDTOValid() {
         return AgendaRequest.builder()
-            .category("S")
+            .category(Category.SPORTS)
             .question("I should bet on Palmeiras?")
             .cpf("33092209079")
             .duration(10)
@@ -20,7 +21,7 @@ public class AgendaFixture {
 
     public static AgendaRequest AgendaDTOValid2() {
         return AgendaRequest.builder()
-            .category("T")
+            .category(Category.TECHNOLOGY)
             .question("I should buy a Kindle?")
             .cpf("33092209079")
             .duration(30)
@@ -29,27 +30,27 @@ public class AgendaFixture {
 
     public static AgendaRequest AgendaDTOInvalid() {
         return AgendaRequest.builder()
-            .category("")
+            .category(null)
             .question("")
             .duration(null)
             .build();
     }
 
     public static Agenda AgendaEntityValid() {
-        Category category = Category.SPORTS;
+        AgendaMapper agendaMapper = new AgendaMapperImpl();
         LocalDateTime finishOn = LocalDateTime.now().plusMinutes(AgendaDTOValid().duration());
-        return AgendaMapper.dtoToAgenda(AgendaDTOValid(), category, finishOn);
+        return agendaMapper.dtoToAgenda(AgendaDTOValid(), finishOn);
     }
 
     public static Agenda AgendaEntityValid2() {
-        Category category = Category.TECHNOLOGY;
+        AgendaMapper agendaMapper = new AgendaMapperImpl();
         LocalDateTime finishOn = LocalDateTime.now().plusMinutes(AgendaDTOValid().duration());
-        return AgendaMapper.dtoToAgenda(AgendaDTOValid2(), category, finishOn);
+        return agendaMapper.dtoToAgenda(AgendaDTOValid2(), finishOn);
     }
 
     public static Agenda AgendaEntityInvalid() {
-        Category category = Category.PROGRAMMING;
+        AgendaMapper agendaMapper = new AgendaMapperImpl();
         LocalDateTime finishOn = LocalDateTime.now().plusMinutes(AgendaDTOValid().duration());
-        return AgendaMapper.dtoToAgenda(AgendaDTOInvalid(), category, finishOn);
+        return agendaMapper.dtoToAgenda(AgendaDTOInvalid(), finishOn);
     }
 }

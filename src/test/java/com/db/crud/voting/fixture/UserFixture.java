@@ -1,6 +1,7 @@
 package com.db.crud.voting.fixture;
 
 import com.db.crud.voting.dto.mapper.UserMapper;
+import com.db.crud.voting.dto.mapper.UserMapperImpl;
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.enums.UserType;
 import com.db.crud.voting.model.User;
@@ -11,13 +12,13 @@ public class UserFixture {
         return UserRequest.builder()
             .firstName("Aurora")
             .surname("Kruschewsky")
-            .userType("A")
+            .userType(UserType.ADMIN)
             .cpf("05073122011")
             .build();
     }
 
     public static User UserEntityValid() {
-        UserType userType = UserType.ADMIN;
-        return UserMapper.dtoToUser(UserDTOValid(), userType);
+        UserMapper userMapper = new UserMapperImpl();
+        return userMapper.dtoToUser(UserDTOValid());
     }
 }
