@@ -8,7 +8,6 @@ import java.time.temporal.ChronoUnit;
 import org.springframework.stereotype.Service;
 
 import com.db.crud.voting.dto.mapper.AgendaMapper;
-import com.db.crud.voting.dto.mapper.AgendaMapperWrapper;
 import com.db.crud.voting.dto.mapper.LogMapper;
 import com.db.crud.voting.dto.mapper.VoteMapper;
 import com.db.crud.voting.dto.request.AddVoteRequest;
@@ -31,7 +30,9 @@ import com.db.crud.voting.repository.UserRepository;
 import com.db.crud.voting.service.logs.LogService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class AgendaServiceImpl implements AgendaService {
@@ -39,13 +40,15 @@ public class AgendaServiceImpl implements AgendaService {
     AgendaRepository agendaRepository;
     UserRepository userRepository;
     LogService logService;
-    AgendaMapperWrapper agendaMapperWrapper;
+    AgendaMapper agendaMapper;
+    VoteMapper voteMapper;
     
     @Override
     public String finishAgenda() {
         agendaRepository.findByHasEnded(false).forEach(agenda -> {
             LocalDateTime actualDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
             if (actualDate.isAfter(agenda.getFinishOn())) {
+                log.info("Agenda Finished: "+agenda);
                 agendaRepository.finishAgenda(agenda.getId());
                 agendaRepository.save(agenda);
             }
@@ -56,79 +59,90 @@ public class AgendaServiceImpl implements AgendaService {
     @Override
     public List<AgendaResponse> getEndedAgendas() {
         return agendaRepository.findByHasEnded(true)
-            .stream().map((agenda) -> AgendaMapper.agendaToDto(agenda)).toList();
+            .stream().map((agenda) -> agendaMapper.agendaToDto(agenda)).toList();
     }
 
     @Override
     public List<AgendaResponse> getActiveAgendas() {
         return agendaRepository.findByHasEnded(false)
-            .stream().map((agenda) -> AgendaMapper.agendaToDto(agenda)).toList();
+            .stream().map((agenda) -> agendaMapper.agendaToDto(agenda)).toList();
     }
 
     @Override
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
         User user = findUser(agendaRequest.cpf());
+        authenticateUserAdmin(user);
+        log.debug("Admin User Authenticated");
 
-        authenticateUserAdmin(user.getUserType());
         Optional<Agenda> agenda = agendaRepository.findByQuestion(agendaRequest.question());
-
         verifyAgendaPresent(agenda);
+        log.debug("Agenda Doesn't Exist!");
 
         LocalDateTime agendaFinish = getFinishDate(agendaRequest.duration());
-        Agenda agendaCreated = agendaMapperWrapper.dtoToAgenda(agendaRequest, agendaFinish);
+        Agenda agendaCreated = agendaMapper.dtoToAgenda(agendaRequest, agendaFinish);
         agendaRepository.save(agendaCreated);
+        log.debug("Agenda created!");
 
         LogObj logObj = buildObj("Agenda", agendaCreated.getId(), agendaCreated.getQuestion(), Operation.CREATE, agendaCreated.getCreatedOn());
         logService.addLog(logObj);
+        log.debug("Log Entity Created!");
 
-        return AgendaMapper.agendaToDto(agendaCreated);
+        return agendaMapper.agendaToDto(agendaCreated);
     }
 
-    private void authenticateUserAdmin(UserType userType) {
-        if (userType != UserType.ADMIN) {
+    private void authenticateUserAdmin(User user) {
+        if (user.getUserType() != UserType.ADMIN) {
+            log.error("User not Authenticated: "+user);
             throw new AuthorizationException("You don't have authorization to create a agenda!");
         }
     }
 
     private void verifyAgendaPresent(Optional<Agenda> agenda) {
         if (agenda.isPresent()) {
+            log.error("Agenda with the same question was already created!");
             throw new EntityExistsException("This agenda was already created!");
         }
     }
 
     @Override
     public AddVoteResponse addVote(AddVoteRequest addvote) {
-        User user = findUser(addvote.cpf());
         Agenda agenda = findAgenda(addvote.question());
-        
-        veifyAgendaFinished(agenda);
+        verifyAgendaFinished(agenda);
+        log.debug("Agenda found!");
 
+        User user = findUser(addvote.cpf());
         List<User> usersVoted = agenda.getUsersVoted();
+        log.debug("User didn't vote in this agenda yet!");
 
-        verifyAndAddUserVoted(user, usersVoted);
+        verifyUserVoted(user, usersVoted);
+        usersVoted.add(user);
 
         sortVote(addvote.vote(), agenda);
+        log.debug("Vote Sorted!");
 
         agenda.setTotalVotes(agenda.getNoVotes()+agenda.getYesVotes());
         agendaRepository.save(agenda);
+        log.debug("Vote Contabilized!");
         
         LogObj logObj = buildObj("User", user.getId(), user.getFullname(), Operation.VOTE, LocalDateTime.now());
         logService.addLog(logObj);
+        log.debug("Log Entity Created!");
         
-        return VoteMapper.voteToDto(true, user.getCpf());
+        return voteMapper.voteToDto(user.getCpf());
     }
 
-    private void veifyAgendaFinished(Agenda agenda) {
+    private void verifyAgendaFinished(Agenda agenda) {
         if (agenda.isHasEnded()) {
+            log.error("The following agendas has already ended: ", agenda);
             throw new AgendaEndedException("This agenda already ended!");
         }
     }
 
-    private void verifyAndAddUserVoted(User user, List<User> usersVoted) {
+    private void verifyUserVoted(User user, List<User> usersVoted) {
         if (usersVoted.contains(user)) {
+            log.error("This user has already voted on this agenda:", user);
             throw new UserAlreadyVotedException("This user already voted!");
         }
-        usersVoted.add(user);
     }
 
     private void sortVote(String vote, Agenda agenda) {
@@ -139,8 +153,10 @@ public class AgendaServiceImpl implements AgendaService {
             int nVotes = agenda.getNoVotes();
             agenda.setNoVotes(nVotes+1);
         } else {
+            log.info("Invalid Vote!");
             throw new VoteConflictException("Unknown Vote, invalidating Vote!");
         }
+        log.info("Vote Added!");
     }
 
     private Agenda findAgenda(String question) {

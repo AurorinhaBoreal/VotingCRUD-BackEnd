@@ -8,6 +8,7 @@ import com.db.crud.voting.dto.response.LogResponse;
 import com.db.crud.voting.service.logs.LogService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/log")
@@ -28,7 +30,10 @@ public class LogController {
 
     @GetMapping
     public ResponseEntity<List<LogResponse>> getLogs() {
+        log.info("Logs Requested!");
         var body = logService.getLogs();
+        log.info("Request Sucessfull!");
+        
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }
     

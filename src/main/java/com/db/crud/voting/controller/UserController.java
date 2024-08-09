@@ -9,6 +9,7 @@ import com.db.crud.voting.service.user.UserService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/user")
@@ -29,13 +31,19 @@ public class UserController {
     
     @GetMapping
     public ResponseEntity<UserResponse> getSprecificUser(@RequestBody String cpf) {
+        log.info("Requested Specific User!");
         var body = userService.getUser(cpf);
+        log.info("Request Sucessfull!");
+
         return ResponseEntity.status(HttpStatus.OK).body(body); 
     }
 
     @PostMapping
     public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRequest userRegisterRequest) {
+        log.info("Requested Create User with Name: ", userRegisterRequest.firstName());
         var body = userService.register(userRegisterRequest);
+        log.info("Request Sucessfull!");
+        
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
     
