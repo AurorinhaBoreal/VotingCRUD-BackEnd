@@ -7,10 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -84,39 +82,6 @@ class AgendaServiceUnitaryTests {
     AddVoteResponse voteResponseValid = VoteFixture.AddVoteResponse();
 
     LogObj logObjValid = LogFixture.LogObjEntityValid1();
-
-    // Remove this test, create a integration version of it
-    @Test
-    @DisplayName("Happy Test: Should List Active Agendas")
-    void shouldListActiveAgendas() {
-        List<Agenda> agendas = new ArrayList<>();
-        agendas.add(agendaEntityValid);
-        when(agendaRepository.findByHasEnded(false)).thenReturn(agendas);
-
-        List<AgendaResponse> agendaResponse = agendaService.getActiveAgendas();
-        
-        assertNotNull(agendaResponse);
-        assertTrue(agendas.contains(agendaEntityValid));
-    }
-
-    // Remove this test, create a integration version of it
-    @Test
-    @DisplayName("Happy Test: Should List Ended Agendas")
-    void shouldListEndedAgendas() {
-        List<Agenda> agendas = new ArrayList<>();
-        when(agendaRepository.findByHasEnded(true)).thenReturn(agendas);
-
-        agendaEntityValid.setId(2L);
-        
-        agendaRepository.finishAgenda(agendaEntityValid.getId());
-        agendaEntityValid.setHasEnded(true);
-
-        agendas.add(agendaEntityValid);
-        List<AgendaResponse> agendaResponse = agendaService.getEndedAgendas();
-        
-        assertNotNull(agendaResponse);
-        assertTrue(agendas.contains(agendaEntityValid));
-    }
 
     @Test
     @DisplayName("Happy Test: Create Agenda")
