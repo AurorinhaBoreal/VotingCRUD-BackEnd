@@ -81,6 +81,7 @@ public class AgendaServiceImpl implements AgendaService {
 
         LocalDateTime agendaFinish = getFinishDate(agendaRequest.duration());
         Agenda agendaCreated = agendaMapper.dtoToAgenda(agendaRequest, agendaFinish);
+        System.out.println(agendaCreated);
         agendaRepository.save(agendaCreated);
         log.debug("Agenda created!");
 

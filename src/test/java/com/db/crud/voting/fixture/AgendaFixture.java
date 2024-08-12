@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.db.crud.voting.dto.mapper.AgendaMapper;
 import com.db.crud.voting.dto.mapper.AgendaMapperImpl;
 import com.db.crud.voting.dto.request.AgendaRequest;
+import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Category;
 import com.db.crud.voting.model.Agenda;
 
@@ -52,5 +53,10 @@ public class AgendaFixture {
         AgendaMapper agendaMapper = new AgendaMapperImpl();
         LocalDateTime finishOn = LocalDateTime.now().plusMinutes(AgendaDTOValid().duration());
         return agendaMapper.dtoToAgenda(AgendaDTOInvalid(), finishOn);
+    }
+
+    public static AgendaResponse AgendaResponseValid() {
+        AgendaMapper agendaMapper = new AgendaMapperImpl();
+        return agendaMapper.agendaToDto(AgendaEntityValid());
     }
 }

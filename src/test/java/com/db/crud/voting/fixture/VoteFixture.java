@@ -1,6 +1,7 @@
 package com.db.crud.voting.fixture;
 
 import com.db.crud.voting.dto.request.AddVoteRequest;
+import com.db.crud.voting.dto.response.AddVoteResponse;
 
 public class VoteFixture {
     
@@ -17,6 +18,12 @@ public class VoteFixture {
             .cpf("05073122011")
             .question("I should bet on Palmeiras?")
             .vote("N")
+            .build();
+    }
+
+    public static AddVoteResponse AddVoteResponse() {
+        return AddVoteResponse.builder()
+            .userCpf("05073122011")
             .build();
     }
 }

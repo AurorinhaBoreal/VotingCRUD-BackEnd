@@ -10,6 +10,9 @@ import com.db.crud.voting.model.User;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
+    @Mapping(source = "userType", target = "userType")
+    @Mapping(source = "firstName", target = "firstName")
+    @Mapping(source = "surname", target = "surname")
     UserResponse userToDto(User user);
 
     @Mapping(target = "id", ignore = true)

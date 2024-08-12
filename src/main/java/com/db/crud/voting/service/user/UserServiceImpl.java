@@ -44,7 +44,8 @@ public class UserServiceImpl implements UserService {
         logService.addLog(logObj);
         log.debug("Log Entity Created!");
         
-        return userMapper.userToDto(userRegistered);
+        UserResponse userA =  userMapper.userToDto(userRegistered);
+        return userA;
     }
 
     private void verifyUserPresent(Optional<User> user) {

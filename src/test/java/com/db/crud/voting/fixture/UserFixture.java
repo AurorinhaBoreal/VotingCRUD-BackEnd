@@ -3,6 +3,7 @@ package com.db.crud.voting.fixture;
 import com.db.crud.voting.dto.mapper.UserMapper;
 import com.db.crud.voting.dto.mapper.UserMapperImpl;
 import com.db.crud.voting.dto.request.UserRequest;
+import com.db.crud.voting.dto.response.UserResponse;
 import com.db.crud.voting.enums.UserType;
 import com.db.crud.voting.model.User;
 
@@ -20,5 +21,10 @@ public class UserFixture {
     public static User UserEntityValid() {
         UserMapper userMapper = new UserMapperImpl();
         return userMapper.dtoToUser(UserDTOValid());
+    }
+
+    public static UserResponse UserResponseValid() {
+        UserMapper userMapper = new UserMapperImpl();
+        return userMapper.userToDto(UserEntityValid());
     }
 }

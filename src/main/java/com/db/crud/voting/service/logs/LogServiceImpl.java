@@ -1,6 +1,7 @@
 package com.db.crud.voting.service.logs;
 
 import java.util.List;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 

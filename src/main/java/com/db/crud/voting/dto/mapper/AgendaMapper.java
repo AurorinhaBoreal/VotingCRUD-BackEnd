@@ -4,13 +4,12 @@ import java.time.LocalDateTime;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.model.Agenda;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface AgendaMapper {
     
     AgendaResponse agendaToDto(Agenda agenda);
@@ -21,6 +20,7 @@ public interface AgendaMapper {
     @Mapping(target = "noVotes", ignore = true)
     @Mapping(target = "totalVotes", ignore = true)
     @Mapping(target = "hasEnded", ignore = true)
+    @Mapping(target = "usersVoted", ignore = true)
     @Mapping(source = "agendaRequest.category", target = "category")
     @Mapping(source = "agendaRequest.duration", target = "duration")
     @Mapping(source = "agendaRequest.question", target = "question")
