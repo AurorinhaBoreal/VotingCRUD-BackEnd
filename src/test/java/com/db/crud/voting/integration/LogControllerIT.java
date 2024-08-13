@@ -20,7 +20,7 @@ import com.db.crud.voting.fixture.SqlProvider;
 @AutoConfigureMockMvc
 @SpringBootTest(classes = {VotingApplication.class})
 @ActiveProfiles("test")
-public class LogControllerIntegration {
+class LogControllerIT {
     
     @Autowired
     MockMvc mockMvc;

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 @SpringBootTest(classes = {VotingApplication.class})
 @ActiveProfiles("test")
-public class AgendaControllerIntegration {
+class AgendaControllerIT {
     
     @Autowired
     MockMvc mockMvc;
