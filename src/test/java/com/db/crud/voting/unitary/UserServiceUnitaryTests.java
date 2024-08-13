@@ -15,10 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.db.crud.voting.dto.mapper.UserMapperWrapper;
+import com.db.crud.voting.dto.mapper.LogMapper;
+import com.db.crud.voting.dto.mapper.UserMapper;
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
-import com.db.crud.voting.enums.UserType;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.fixture.UserFixture;
 import com.db.crud.voting.model.User;
@@ -33,7 +33,10 @@ class UserServiceUnitaryTests {
     UserRepository userRepository;
     
     @Mock
-    UserMapperWrapper userMapperWrapper;
+    UserMapper userMapper;
+
+    @Mock
+    LogMapper logMapper;
 
     @Mock
     LogService logService;
@@ -43,16 +46,18 @@ class UserServiceUnitaryTests {
 
     UserRequest userDTOValid = UserFixture.UserDTOValid();
     User userEntityValid = UserFixture.UserEntityValid();
+    UserResponse userResponseValid = UserFixture.UserResponseValid();
   
     @Test
     @DisplayName("Happy Test: Create User")
     void shouldCreateUser() {
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.empty());
-        when(userMapperWrapper.dtoToUser(userDTOValid, UserType.ADMIN)).thenReturn(userEntityValid);
+        when(userMapper.dtoToUser(userDTOValid)).thenReturn(userEntityValid);
+        when(userMapper.userToDto(userEntityValid)).thenReturn(userResponseValid);
         userEntityValid.setId(1L);
 
         UserResponse userResponse = userService.register(userDTOValid);
-
+        System.out.println(userResponse);
         assertNotNull(userResponse);
         assertEquals("Aurora", userResponse.firstName() );
     }
@@ -61,6 +66,7 @@ class UserServiceUnitaryTests {
     @DisplayName("Happy Test: Get User")
     void shouldGetUser() {
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
+        when(userMapper.userToDto(userEntityValid)).thenReturn(userResponseValid);
 
         UserResponse user = userService.getUser("05073122011");
 

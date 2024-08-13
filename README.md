@@ -78,8 +78,8 @@ This topic refers to all the technologies used in the project and the steps to b
 
 - 🚧 [US00X] Related to Extra Features
   - 🚧 [US00X-1] Swagger Implementation
-  - 🚧 [US00X-3] Integration Tests - Happy
-  - 🚧 [US00X-4] Integration Tests - Sad
+  - ✅ [US00X-3] Integration Tests - Happy
+  - ✅ [US00X-4] Integration Tests - Sad
   - 🚧 [US00X-5] Performance Tests 
 
 ### Fix

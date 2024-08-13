@@ -1,7 +1,6 @@
 package com.db.crud.voting.unitary;
 
 import java.util.List;
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -27,11 +26,15 @@ class LogServiceUnitaryTests {
     @Mock
     LogRepository logRepository;
 
+    @Mock
+    LogMapper logMapper;
+
     @InjectMocks
     LogServiceImpl logService;
 
     Log logEntityValid1 = LogFixture.LogEntityValid1();
     Log logEntityValid2 = LogFixture.LogEntityValid2();
+    LogObj logObjValid = LogFixture.LogObjEntityValid1();
 
     @Test
     @DisplayName("Happy Test: Should Get Logs")
@@ -46,13 +49,7 @@ class LogServiceUnitaryTests {
     @Test
     @DisplayName("Happy Test: Should add Log")
     void shouldAddLog() {
-        String objType = logEntityValid2.getObjectType();
-        Long objId = logEntityValid2.getId();
-        String objInfo = logEntityValid2.getObjectInfo();
-        String operationCode = "C";
-        LogObj log = LogMapper.logObj(objType, objId, objInfo, operationCode, LocalDateTime.now());
-        
-        boolean added = logService.addLog(log);
+        boolean added = logService.addLog(logObjValid);
 
         assertTrue(added);
     }
