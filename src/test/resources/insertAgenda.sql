@@ -1,0 +1,3 @@
+INSERT INTO tbl_agenda (category, creation_date, duration_minutes, finish_date, agenda_ended, question, no_votes, yes_votes, total_votes) VALUES ('TECHNOLOGY', '2024-08-12 11:00:00', 876030, '2124-08-12 11:30:00', false, 'Do you like Air-Fryers?', 0, 0, 0)
+INSERT INTO tbl_agenda (category, creation_date, duration_minutes, finish_date, agenda_ended, question, no_votes, yes_votes, total_votes) VALUES ('OPINION', '2023-08-12 16:00:00', 1440, '2023-08-13 16:00:00', true, 'Do you like leap years?', 1, 4, 5)
+INSERT INTO tbl_agenda (category, creation_date, duration_minutes, finish_date, agenda_ended, question, no_votes, yes_votes, total_votes) VALUES ('SPORTS', '2024-08-12 16:00:00', 876000, '2023-08-14 16:00:00', false, 'Do you playe volleyboll?', 4, 8, 12)

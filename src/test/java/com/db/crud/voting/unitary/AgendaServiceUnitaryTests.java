@@ -7,10 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -20,17 +18,22 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.db.crud.voting.dto.mapper.AgendaMapperWrapper;
+import com.db.crud.voting.dto.mapper.AgendaMapper;
+import com.db.crud.voting.dto.mapper.LogMapper;
+import com.db.crud.voting.dto.mapper.VoteMapper;
 import com.db.crud.voting.dto.request.AddVoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
+import com.db.crud.voting.dto.request.LogObj;
+import com.db.crud.voting.dto.response.AddVoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
-import com.db.crud.voting.enums.Category;
+import com.db.crud.voting.enums.Operation;
 import com.db.crud.voting.enums.UserType;
 import com.db.crud.voting.exception.AuthorizationException;
 import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.exception.UserAlreadyVotedException;
 import com.db.crud.voting.fixture.AgendaFixture;
+import com.db.crud.voting.fixture.LogFixture;
 import com.db.crud.voting.fixture.UserFixture;
 import com.db.crud.voting.fixture.VoteFixture;
 import com.db.crud.voting.model.Agenda;
@@ -45,7 +48,7 @@ import com.db.crud.voting.service.user.UserServiceImpl;
 class AgendaServiceUnitaryTests {
 
     @Mock
-    AgendaMapperWrapper agendaMapperWrapper;
+    AgendaMapper agendaMapper;
 
     @Mock
     AgendaRepository agendaRepository;
@@ -59,57 +62,39 @@ class AgendaServiceUnitaryTests {
     @Mock
     LogService logService;
 
+    @Mock
+    LogMapper logMapper;
+
+    @Mock
+    VoteMapper voteMapper;
+
     @InjectMocks
     AgendaServiceImpl agendaService;
 
     AgendaRequest agendaDTOValid = AgendaFixture.AgendaDTOValid();
     Agenda agendaEntityValid = AgendaFixture.AgendaEntityValid();
+    AgendaResponse agendaResponseValid = AgendaFixture.AgendaResponseValid();
 
     User userEntityValid = UserFixture.UserEntityValid();
 
     AddVoteRequest voteDTOValid1 = VoteFixture.AddVote1();
     AddVoteRequest voteDTOValid2 = VoteFixture.AddVote2();
+    AddVoteResponse voteResponseValid = VoteFixture.AddVoteResponse();
 
-    @Test
-    @DisplayName("Happy Test: Should List Active Agendas")
-    void shouldListActiveAgendas() {
-        List<Agenda> agendas = new ArrayList<>();
-        agendas.add(agendaEntityValid);
-        when(agendaRepository.findByHasEnded(false)).thenReturn(agendas);
-
-        List<AgendaResponse> agendaResponse = agendaService.getActiveAgendas();
-        
-        assertNotNull(agendaResponse);
-        assertTrue(agendas.contains(agendaEntityValid));
-    }
-
-    @Test
-    @DisplayName("Happy Test: Should List Ended Agendas")
-    void shouldListEndedAgendas() {
-        List<Agenda> agendas = new ArrayList<>();
-        when(agendaRepository.findByHasEnded(true)).thenReturn(agendas);
-
-        agendaEntityValid.setId(2L);
-        
-        agendaRepository.finishAgenda(agendaEntityValid.getId());
-        agendaEntityValid.setHasEnded(true);
-
-        agendas.add(agendaEntityValid);
-        List<AgendaResponse> agendaResponse = agendaService.getEndedAgendas();
-        
-        assertNotNull(agendaResponse);
-        assertTrue(agendas.contains(agendaEntityValid));
-    }
+    LogObj logObjValid = LogFixture.LogObjEntityValid1();
 
     @Test
     @DisplayName("Happy Test: Create Agenda")
     void shouldCreateAgenda() {
         LocalDateTime finishOn = (LocalDateTime.now()).truncatedTo(ChronoUnit.SECONDS).plusMinutes(agendaDTOValid.duration());
         
+        agendaEntityValid.setId(2L);
+
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.empty());
-        when(agendaMapperWrapper.dtoToAgenda(agendaDTOValid, Category.SPORTS, finishOn)).thenReturn(agendaEntityValid);
-        agendaEntityValid.setId(2L);
+        when(agendaMapper.dtoToAgenda(agendaDTOValid, finishOn)).thenReturn(agendaEntityValid);
+        when(agendaMapper.agendaToDto(agendaEntityValid)).thenReturn(agendaResponseValid);
+        when(logMapper.logObj("Agenda", agendaEntityValid.getId(), agendaEntityValid.getQuestion(), Operation.CREATE, agendaEntityValid.getCreatedOn())).thenReturn(logObjValid);
         
         AgendaResponse agenda = agendaService.createAgenda(agendaDTOValid);
 
@@ -121,6 +106,7 @@ class AgendaServiceUnitaryTests {
     void shouldAddYesVote() {
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.of(agendaEntityValid));
+        when(voteMapper.voteToDto(userEntityValid.getCpf())).thenReturn(voteResponseValid);
     
         userEntityValid.setId(4L);
         agendaService.addVote(voteDTOValid1);
@@ -145,7 +131,7 @@ class AgendaServiceUnitaryTests {
     void shouldfinishAgenda() {
         agendaEntityValid.setId(1L);
         agendaEntityValid.setHasEnded(true);
-        agendaService.finishAgenda(agendaEntityValid);
+        agendaService.finishAgenda();
         
 
         assertTrue(agendaEntityValid.isHasEnded());
