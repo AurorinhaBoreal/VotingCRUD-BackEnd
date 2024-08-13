@@ -15,8 +15,8 @@ public class VoteFixture {
 
     public static AddVoteRequest AddVote2() {
         return AddVoteRequest.builder()
-            .cpf("05073122011")
-            .question("I should bet on Palmeiras?")
+            .cpf("33092209079")
+            .question("Do you like Air-Fryers?")
             .vote("N")
             .build();
     }

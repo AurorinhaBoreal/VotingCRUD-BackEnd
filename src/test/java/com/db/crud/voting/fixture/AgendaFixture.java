@@ -14,7 +14,7 @@ public class AgendaFixture {
     public static AgendaRequest AgendaDTOValid() {
         return AgendaRequest.builder()
             .category(Category.SPORTS)
-            .question("I should bet on Palmeiras?")
+            .question("Do you like leap years?")
             .cpf("33092209079")
             .duration(10)
             .build();
