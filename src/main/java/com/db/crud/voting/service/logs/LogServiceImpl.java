@@ -25,7 +25,7 @@ public class LogServiceImpl implements LogService {
     @Override
     public List<LogResponse> getLogs() {
         return logRepository.findAll()
-            .stream().map((log) -> logMapper.logToDto(log)).toList();
+            .stream().map(log -> logMapper.logToDto(log)).toList();
     }
 
     @Override

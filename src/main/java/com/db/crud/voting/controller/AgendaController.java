@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin(origins = {"http://localhost:3000/", "http://localhost:5173/", "https://votacao-front.onrender.com"})
 public class AgendaController {
     
+    private static final String REQUEST_SUCCESSFUL = "Request Successful!";
     private final AgendaService agendaService;
 
     @GetMapping
@@ -44,7 +45,7 @@ public class AgendaController {
         log.info("Requested Get Active Agendas!");
         agendaService.finishAgenda();
         var body = agendaService.getActiveAgendas();
-        log.info("Request Sucessfull!");
+        log.info(REQUEST_SUCCESSFUL);
 
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }
@@ -53,7 +54,7 @@ public class AgendaController {
     public ResponseEntity<AgendaResponse> createAgenda(@RequestBody @Valid AgendaRequest agendaRequest) {
         log.info("Requested Create Agenda: ", agendaRequest);
         var body = agendaService.createAgenda(agendaRequest);
-        log.info("Request Sucessfull!");
+        log.info(REQUEST_SUCCESSFUL);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
@@ -63,7 +64,7 @@ public class AgendaController {
         log.info("Requested Vote!");
         agendaService.finishAgenda();
         var body = agendaService.addVote(addVoteRequest);
-        log.info("Request Sucessfull!");
+        log.info(REQUEST_SUCCESSFUL);
         
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }
