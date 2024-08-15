@@ -26,7 +26,6 @@ import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Operation;
 import com.db.crud.voting.enums.UserType;
 import com.db.crud.voting.exception.AuthorizationException;
-import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.exception.UserAlreadyVotedException;
 import com.db.crud.voting.fixture.AgendaFixture;
@@ -90,7 +89,7 @@ class AgendaServiceUnitaryTests {
         
         agendaEntityValid.setId(2L);
 
-        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
+        when(userService.getUser(anyString())).thenReturn(userEntityValid);
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.empty());
         when(agendaMapper.dtoToAgenda(agendaDTOValid, finishOn)).thenReturn(agendaEntityValid);
         when(agendaMapper.agendaToDto(agendaEntityValid)).thenReturn(agendaResponseValid);
@@ -104,7 +103,7 @@ class AgendaServiceUnitaryTests {
     @Test
     @DisplayName("Happy Test: Add Yes Vote")
     void shouldAddYesVote() {
-        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
+        when(userService.getUser(anyString())).thenReturn(userEntityValid);
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.of(agendaEntityValid));
         when(voteMapper.voteToDto(userEntityValid.getCpf())).thenReturn(voteResponseValid);
     
@@ -117,7 +116,7 @@ class AgendaServiceUnitaryTests {
     @Test
     @DisplayName("Happy Test: Add No Vote")
     void shouldAddNoVote() {
-        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
+        when(userService.getUser(anyString())).thenReturn(userEntityValid);
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.of(agendaEntityValid));
     
         userEntityValid.setId(4L);
@@ -138,31 +137,21 @@ class AgendaServiceUnitaryTests {
     }
 
     @Test
-    @DisplayName("Sad Test: Should Thrown CannotFindEntityException")
-        void shouldThrownCannotFindEntityException() {
-    CannotFindEntityException thrown = assertThrows(CannotFindEntityException.class, () -> {
-        agendaService.createAgenda(agendaDTOValid);
-    });
-    
-    assertEquals("The user with cpf: "+agendaDTOValid.cpf()+" isn't registered!", thrown.getMessage());
-    }
-
-    @Test
     @DisplayName("Sad Test: Should thrown AuthorizationException")
     void thrownAuthorizationException() {
         userEntityValid.setUserType(UserType.COMMON);
-        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
-    AuthorizationException thrown = assertThrows(AuthorizationException.class, () -> {
-        agendaService.createAgenda(agendaDTOValid);
-    });
-    
-    assertEquals("You don't have authorization to create a agenda!", thrown.getMessage());
+        when(userService.getUser(anyString())).thenReturn(userEntityValid);
+        AuthorizationException thrown = assertThrows(AuthorizationException.class, () -> {
+            agendaService.createAgenda(agendaDTOValid);
+        });
+        
+        assertEquals("You don't have authorization to create a agenda!", thrown.getMessage());
     }
 
     @Test
     @DisplayName("Sad Test: Should Thrown EntityExistsException")
     void thrownEntityExistsException() {
-        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
+        when(userService.getUser(anyString())).thenReturn(userEntityValid);
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.of(agendaEntityValid));
         
     EntityExistsException thrown = assertThrows(EntityExistsException.class, () -> {
@@ -175,7 +164,7 @@ class AgendaServiceUnitaryTests {
     @Test
     @DisplayName("Sad Test: Should Thrown UserALreadyVotedException")
     void thrownUserAlreadyVotedException() {
-        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
+        when(userService.getUser(anyString())).thenReturn(userEntityValid);
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.of(agendaEntityValid));
     
         userEntityValid.setId(4L);

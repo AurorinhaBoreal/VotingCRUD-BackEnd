@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
+import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.fixture.UserFixture;
 import com.db.crud.voting.mapper.LogMapper;
@@ -68,7 +69,7 @@ class UserServiceUnitaryTests {
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
         when(userMapper.userToDto(userEntityValid)).thenReturn(userResponseValid);
 
-        UserResponse user = userService.getUser("05073122011");
+        UserResponse user = userService.getUserResponse("05073122011");
 
         assertNotNull(user);
     }
@@ -83,5 +84,17 @@ class UserServiceUnitaryTests {
         });
     
         assertEquals("A person with this cpf already exists!", thrown.getMessage());
+    }
+
+    @Test
+    @DisplayName("Sad Test: Should Thrown CannotFindEntityException")
+    void shouldThrownCannotFindEntityException() {
+
+        String cpf = "66754";
+        CannotFindEntityException thrown = assertThrows(CannotFindEntityException.class, () -> {
+            userService.getUser(cpf);
+        });
+        
+        assertEquals("The user with cpf: "+cpf+" isn't registered!", thrown.getMessage());
     }
 }
