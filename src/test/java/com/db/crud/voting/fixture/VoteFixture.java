@@ -2,6 +2,7 @@ package com.db.crud.voting.fixture;
 
 import com.db.crud.voting.dto.request.AddVoteRequest;
 import com.db.crud.voting.dto.response.AddVoteResponse;
+import com.db.crud.voting.enums.Vote;
 
 public class VoteFixture {
     
@@ -9,7 +10,7 @@ public class VoteFixture {
         return AddVoteRequest.builder()
             .cpf("05073122011")
             .question("I should bet on Palmeiras?")
-            .vote("Y")
+            .vote(Vote.YES)
             .build();
     }
 
@@ -17,7 +18,7 @@ public class VoteFixture {
         return AddVoteRequest.builder()
             .cpf("33092209079")
             .question("Do you like Air-Fryers?")
-            .vote("N")
+            .vote(Vote.NO)
             .build();
     }
 

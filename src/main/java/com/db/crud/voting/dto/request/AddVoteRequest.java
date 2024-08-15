@@ -1,5 +1,7 @@
 package com.db.crud.voting.dto.request;
 
+import com.db.crud.voting.enums.Vote;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
@@ -12,5 +14,5 @@ public record AddVoteRequest(
     String cpf,
 
     @NotBlank(message = "Inform the vote")
-    String vote) {
+    Vote vote) {
 }

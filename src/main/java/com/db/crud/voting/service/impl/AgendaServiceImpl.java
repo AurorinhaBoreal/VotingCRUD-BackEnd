@@ -14,6 +14,7 @@ import com.db.crud.voting.dto.response.AddVoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Operation;
 import com.db.crud.voting.enums.UserType;
+import com.db.crud.voting.enums.Vote;
 import com.db.crud.voting.exception.AgendaEndedException;
 import com.db.crud.voting.exception.AuthorizationException;
 import com.db.crud.voting.exception.CannotFindEntityException;
@@ -147,11 +148,11 @@ public class AgendaServiceImpl implements AgendaService {
         }
     }
 
-    private void sortVote(String vote, Agenda agenda) {
-        if (vote.equals("Y")) {
+    private void sortVote(Vote vote, Agenda agenda) {
+        if (vote == Vote.YES) {
             int yVotes = agenda.getYesVotes();
             agenda.setYesVotes(yVotes+1);
-        } else if (vote.equals("N")) {
+        } else if (vote == Vote.NO) {
             int nVotes = agenda.getNoVotes();
             agenda.setNoVotes(nVotes+1);
         } else {
