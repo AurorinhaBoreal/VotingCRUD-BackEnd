@@ -1,4 +1,4 @@
-package com.db.crud.voting.service.user;
+package com.db.crud.voting.service;
 
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;

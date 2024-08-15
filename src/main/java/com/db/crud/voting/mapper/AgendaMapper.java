@@ -1,4 +1,4 @@
-package com.db.crud.voting.dto.mapper;
+package com.db.crud.voting.mapper;
 
 import java.time.LocalDateTime;
 

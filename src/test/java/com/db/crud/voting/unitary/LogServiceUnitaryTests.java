@@ -12,13 +12,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.db.crud.voting.dto.mapper.LogMapper;
 import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.response.LogResponse;
 import com.db.crud.voting.fixture.LogFixture;
+import com.db.crud.voting.mapper.LogMapper;
 import com.db.crud.voting.model.Log;
 import com.db.crud.voting.repository.LogRepository;
-import com.db.crud.voting.service.logs.LogServiceImpl;
+import com.db.crud.voting.service.impl.LogServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class LogServiceUnitaryTests {

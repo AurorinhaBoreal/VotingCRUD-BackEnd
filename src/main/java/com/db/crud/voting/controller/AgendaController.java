@@ -7,7 +7,7 @@ import com.db.crud.voting.dto.request.AddVoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.response.AddVoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
-import com.db.crud.voting.service.agenda.AgendaService;
+import com.db.crud.voting.service.AgendaService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

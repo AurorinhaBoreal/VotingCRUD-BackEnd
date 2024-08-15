@@ -1,4 +1,4 @@
-package com.db.crud.voting.service.logs;
+package com.db.crud.voting.service;
 
 import java.util.List;
 

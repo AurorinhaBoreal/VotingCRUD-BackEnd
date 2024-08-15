@@ -15,16 +15,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.db.crud.voting.dto.mapper.LogMapper;
-import com.db.crud.voting.dto.mapper.UserMapper;
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.fixture.UserFixture;
+import com.db.crud.voting.mapper.LogMapper;
+import com.db.crud.voting.mapper.UserMapper;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.UserRepository;
-import com.db.crud.voting.service.logs.LogService;
-import com.db.crud.voting.service.user.UserServiceImpl;
+import com.db.crud.voting.service.LogService;
+import com.db.crud.voting.service.impl.UserServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceUnitaryTests {

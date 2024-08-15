@@ -1,4 +1,4 @@
-package com.db.crud.voting.service.agenda;
+package com.db.crud.voting.service.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,9 +7,6 @@ import java.time.temporal.ChronoUnit;
 
 import org.springframework.stereotype.Service;
 
-import com.db.crud.voting.dto.mapper.AgendaMapper;
-import com.db.crud.voting.dto.mapper.LogMapper;
-import com.db.crud.voting.dto.mapper.VoteMapper;
 import com.db.crud.voting.dto.request.AddVoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.request.LogObj;
@@ -23,11 +20,15 @@ import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.exception.UserAlreadyVotedException;
 import com.db.crud.voting.exception.VoteConflictException;
+import com.db.crud.voting.mapper.AgendaMapper;
+import com.db.crud.voting.mapper.LogMapper;
+import com.db.crud.voting.mapper.VoteMapper;
 import com.db.crud.voting.model.Agenda;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.AgendaRepository;
 import com.db.crud.voting.repository.UserRepository;
-import com.db.crud.voting.service.logs.LogService;
+import com.db.crud.voting.service.AgendaService;
+import com.db.crud.voting.service.LogService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

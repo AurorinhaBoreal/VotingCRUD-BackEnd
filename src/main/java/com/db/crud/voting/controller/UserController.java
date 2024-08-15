@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
-import com.db.crud.voting.service.user.UserService;
+import com.db.crud.voting.service.UserService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

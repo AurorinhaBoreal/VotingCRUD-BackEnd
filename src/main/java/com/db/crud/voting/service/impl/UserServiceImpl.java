@@ -1,21 +1,22 @@
-package com.db.crud.voting.service.user;
+package com.db.crud.voting.service.impl;
 
 import java.util.Optional;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
-import com.db.crud.voting.dto.mapper.LogMapper;
-import com.db.crud.voting.dto.mapper.UserMapper;
 import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
 import com.db.crud.voting.enums.Operation;
 import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
+import com.db.crud.voting.mapper.LogMapper;
+import com.db.crud.voting.mapper.UserMapper;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.UserRepository;
-import com.db.crud.voting.service.logs.LogService;
+import com.db.crud.voting.service.LogService;
+import com.db.crud.voting.service.UserService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
