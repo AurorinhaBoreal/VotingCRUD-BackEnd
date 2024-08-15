@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse register(UserRequest userRegisterDto) {
+        log.info("Requested Create User with Name: ", userRegisterDto.firstName());
         Optional<User> user = userRepository.findByCpf(userRegisterDto.cpf());
         verifyUserPresent(user);
         log.debug("User didn't already exists!");
@@ -57,6 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse getUser(String cpf) {
+        log.info("Requested Specific User!");
         User user = userRepository.findByCpf(cpf).orElseThrow(() -> new CannotFindEntityException("Cannot find this User"));
         return userMapper.userToDto(user);
     }

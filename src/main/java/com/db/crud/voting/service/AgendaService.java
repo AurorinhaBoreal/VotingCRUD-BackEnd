@@ -17,5 +17,5 @@ public interface AgendaService {
 
     AddVoteResponse addVote(AddVoteRequest addVoteRequest);
 
-    String finishAgenda();
+    void finishAgenda();
 }

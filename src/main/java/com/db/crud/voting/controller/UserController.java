@@ -31,20 +31,12 @@ public class UserController {
     
     @GetMapping
     public ResponseEntity<UserResponse> getSprecificUser(@RequestBody String cpf) {
-        log.info("Requested Specific User!");
-        var body = userService.getUser(cpf);
-        log.info("Request Sucessfull!");
-
-        return ResponseEntity.status(HttpStatus.OK).body(body); 
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUser(cpf)); 
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRequest userRegisterRequest) {
-        log.info("Requested Create User with Name: ", userRegisterRequest.firstName());
-        var body = userService.register(userRegisterRequest);
-        log.info("Request Sucessfull!");
-        
-        return ResponseEntity.status(HttpStatus.CREATED).body(body);
+    public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRequest userRegisterRequest) {        
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(userRegisterRequest));
     }
     
 }

@@ -15,7 +15,8 @@ import com.db.crud.voting.repository.LogRepository;
 import com.db.crud.voting.service.LogService;
 
 import lombok.AllArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 @AllArgsConstructor
 public class LogServiceImpl implements LogService {
@@ -25,6 +26,7 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public List<LogResponse> getLogs() {
+        log.info("Logs Requested!");
         return logRepository.findAll()
             .stream().map(log -> logMapper.logToDto(log)).toList();
     }

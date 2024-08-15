@@ -47,7 +47,7 @@ public class AgendaServiceImpl implements AgendaService {
     LogMapper logMapper;
     
     @Override
-    public String finishAgenda() {
+    public void finishAgenda() {
         agendaRepository.findByHasEnded(false).forEach(agenda -> {
             LocalDateTime actualDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
             if (actualDate.isAfter(agenda.getFinishOn())) {
@@ -56,23 +56,25 @@ public class AgendaServiceImpl implements AgendaService {
                 agendaRepository.save(agenda);
             }
         });
-        return "Agenda Ended!";
     }
 
     @Override
     public List<AgendaResponse> getEndedAgendas() {
+        log.info("Requested Get Ended Agendas!");
         return agendaRepository.findByHasEnded(true)
             .stream().map(agenda -> agendaMapper.agendaToDto(agenda)).toList();
     }
 
     @Override
     public List<AgendaResponse> getActiveAgendas() {
+        log.info("Requested Get Active Agendas!");
         return agendaRepository.findByHasEnded(false)
             .stream().map(agenda -> agendaMapper.agendaToDto(agenda)).toList();
     }
 
     @Override
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
+        log.info("Requested Create Agenda: ", agendaRequest);
         User user = findUser(agendaRequest.cpf());
         authenticateUserAdmin(user);
         log.debug("Admin User Authenticated");
@@ -109,6 +111,7 @@ public class AgendaServiceImpl implements AgendaService {
 
     @Override
     public AddVoteResponse addVote(AddVoteRequest addvote) {
+        log.info("Requested Vote!");
         Agenda agenda = findAgenda(addvote.question());
         verifyAgendaFinished(agenda);
         log.debug("Agenda found!");
