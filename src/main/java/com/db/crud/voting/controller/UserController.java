@@ -31,7 +31,7 @@ public class UserController {
     
     @GetMapping
     public ResponseEntity<UserResponse> getSprecificUser(@RequestBody String cpf) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getUser(cpf)); 
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserResponse(cpf)); 
     }
 
     @PostMapping

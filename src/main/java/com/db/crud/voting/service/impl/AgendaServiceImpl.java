@@ -27,9 +27,9 @@ import com.db.crud.voting.mapper.VoteMapper;
 import com.db.crud.voting.model.Agenda;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.AgendaRepository;
-import com.db.crud.voting.repository.UserRepository;
 import com.db.crud.voting.service.AgendaService;
 import com.db.crud.voting.service.LogService;
+import com.db.crud.voting.service.UserService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AgendaServiceImpl implements AgendaService {
     
     AgendaRepository agendaRepository;
-    UserRepository userRepository;
+    UserService userService;
     LogService logService;
     AgendaMapper agendaMapper;
     VoteMapper voteMapper;
@@ -100,6 +100,10 @@ public class AgendaServiceImpl implements AgendaService {
             log.error("User not Authenticated: "+user);
             throw new AuthorizationException("You don't have authorization to create a agenda!");
         }
+    }
+
+    private User findUser(String cpf) {
+        return userService.getUser(cpf);
     }
 
     private void verifyAgendaPresent(Optional<Agenda> agenda) {
@@ -168,12 +172,6 @@ public class AgendaServiceImpl implements AgendaService {
     private Agenda findAgenda(String question) {
         return agendaRepository.findByQuestion(question).orElseThrow(
             () -> new CannotFindEntityException("Cannot find agenda with question: "+question)
-        );
-    }
-
-    private User findUser(String cpf) {
-        return userRepository.findByCpf(cpf).orElseThrow(
-            () -> new CannotFindEntityException("The user with cpf: "+cpf+" isn't registered!")
         );
     }
 

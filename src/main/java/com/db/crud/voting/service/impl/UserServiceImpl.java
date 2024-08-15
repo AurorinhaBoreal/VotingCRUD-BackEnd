@@ -57,10 +57,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse getUser(String cpf) {
+    public UserResponse getUserResponse(String cpf) {
         log.info("Requested Specific User!");
         User user = userRepository.findByCpf(cpf).orElseThrow(() -> new CannotFindEntityException("Cannot find this User"));
         return userMapper.userToDto(user);
+    }
+
+    @Override
+    public User getUser(String cpf) {
+        return userRepository.findByCpf(cpf).orElseThrow(
+            () -> new CannotFindEntityException("The user with cpf: "+cpf+" isn't registered!")
+        );
     }
 
     private LogObj buildObj(String type, Long id, String name, Operation operation, LocalDateTime realizedOn) {
