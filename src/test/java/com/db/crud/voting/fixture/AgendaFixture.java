@@ -2,7 +2,7 @@ package com.db.crud.voting.fixture;
 
 import java.time.LocalDateTime;
 
-import com.db.crud.voting.dto.mapper.AgendaMapperImpl;
+import com.db.crud.voting.mapper.AgendaMapperImpl;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Category;

@@ -1,6 +1,6 @@
 package com.db.crud.voting.fixture;
 
-import com.db.crud.voting.dto.mapper.UserMapperImpl;
+import com.db.crud.voting.mapper.UserMapperImpl;
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
 import com.db.crud.voting.enums.UserType;
