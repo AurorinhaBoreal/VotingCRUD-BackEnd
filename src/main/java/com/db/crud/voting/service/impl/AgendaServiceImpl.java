@@ -5,6 +5,9 @@ import java.util.Optional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.db.crud.voting.dto.request.AddVoteRequest;
@@ -36,7 +39,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@Configuration
 @AllArgsConstructor
+@EnableScheduling
 public class AgendaServiceImpl implements AgendaService {
     
     AgendaRepository agendaRepository;
@@ -46,9 +51,10 @@ public class AgendaServiceImpl implements AgendaService {
     VoteMapper voteMapper;
     LogMapper logMapper;
     
-    @Override
+    @Scheduled(fixedDelay = 120000)
     public void finishAgenda() {
         agendaRepository.findByHasEnded(false).forEach(agenda -> {
+            log.debug("Verify if any agendas has finished...");
             LocalDateTime actualDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
             if (actualDate.isAfter(agenda.getFinishOn())) {
                 log.info("Agenda Finished: "+agenda);

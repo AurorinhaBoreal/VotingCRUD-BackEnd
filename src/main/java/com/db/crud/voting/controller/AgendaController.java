@@ -33,13 +33,11 @@ public class AgendaController {
 
     @GetMapping
     public ResponseEntity<List<AgendaResponse>> getEndedAgendas() {
-        agendaService.finishAgenda();
         return ResponseEntity.status(HttpStatus.OK).body(agendaService.getEndedAgendas());
     }
     
     @GetMapping("/active")
     public ResponseEntity<List<AgendaResponse>> getActiveAgendas() {
-        agendaService.finishAgenda();
         return ResponseEntity.status(HttpStatus.OK).body(agendaService.getActiveAgendas());
     }
 
@@ -50,8 +48,6 @@ public class AgendaController {
 
     @PostMapping("/vote")
     public ResponseEntity<AddVoteResponse> voteAgenda(@RequestBody @Valid AddVoteRequest addVoteRequest) {
-        agendaService.finishAgenda();
-        
         return ResponseEntity.status(HttpStatus.OK).body(agendaService.addVote(addVoteRequest));
     }
 }
