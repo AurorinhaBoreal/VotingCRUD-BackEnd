@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
-public record AddVoteRequest(
+public record VoteRequest(
     @NotBlank(message = "Inform the specified agenda")
     String question,
 

@@ -18,10 +18,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.db.crud.voting.dto.request.AddVoteRequest;
+import com.db.crud.voting.dto.request.VoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.request.LogObj;
-import com.db.crud.voting.dto.response.AddVoteResponse;
+import com.db.crud.voting.dto.response.VoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Operation;
 import com.db.crud.voting.enums.UserType;
@@ -76,9 +76,9 @@ class AgendaServiceUnitaryTests {
 
     User userEntityValid = UserFixture.UserEntityValid();
 
-    AddVoteRequest voteDTOValid1 = VoteFixture.AddVote1();
-    AddVoteRequest voteDTOValid2 = VoteFixture.AddVote2();
-    AddVoteResponse voteResponseValid = VoteFixture.AddVoteResponse();
+    VoteRequest voteDTOValid1 = VoteFixture.AddVote1();
+    VoteRequest voteDTOValid2 = VoteFixture.AddVote2();
+    VoteResponse voteResponseValid = VoteFixture.AddVoteResponse();
 
     LogObj logObjValid = LogFixture.LogObjEntityValid1();
 

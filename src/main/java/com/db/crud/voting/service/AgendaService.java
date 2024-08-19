@@ -2,9 +2,9 @@ package com.db.crud.voting.service;
 
 import java.util.List;
 
-import com.db.crud.voting.dto.request.AddVoteRequest;
+import com.db.crud.voting.dto.request.VoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
-import com.db.crud.voting.dto.response.AddVoteResponse;
+import com.db.crud.voting.dto.response.VoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
 
 public interface AgendaService {
@@ -15,5 +15,5 @@ public interface AgendaService {
 
     AgendaResponse createAgenda(AgendaRequest agendaRequest);
 
-    AddVoteResponse addVote(AddVoteRequest addVoteRequest);
+    VoteResponse addVote(VoteRequest addVoteRequest);
 }

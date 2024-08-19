@@ -10,10 +10,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.db.crud.voting.dto.request.AddVoteRequest;
+import com.db.crud.voting.dto.request.VoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.request.LogObj;
-import com.db.crud.voting.dto.response.AddVoteResponse;
+import com.db.crud.voting.dto.response.VoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Operation;
 import com.db.crud.voting.enums.UserType;
@@ -120,7 +120,7 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public AddVoteResponse addVote(AddVoteRequest addvote) {
+    public VoteResponse addVote(VoteRequest addvote) {
         log.info("Requested Vote!");
         Agenda agenda = findAgenda(addvote.question());
         verifyAgendaFinished(agenda);
