@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.response.LogResponse;
+import com.db.crud.voting.enums.Operation;
 import com.db.crud.voting.mapper.LogMapper;
 import com.db.crud.voting.model.Log;
 import com.db.crud.voting.repository.LogRepository;
@@ -39,5 +40,10 @@ public class LogServiceImpl implements LogService {
         logRepository.save(log);
         
         return true;
+    }
+
+    @Override
+    public LogObj buildObj(String type, Long id, String name, Operation operation, LocalDateTime realizedOn) {
+        return logMapper.logObj(type, id, name, operation, realizedOn);
     }
 }

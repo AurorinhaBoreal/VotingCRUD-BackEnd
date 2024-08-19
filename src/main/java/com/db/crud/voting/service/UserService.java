@@ -10,5 +10,7 @@ public interface UserService {
 
     User getUser(String cpf);
 
+    void authenticateUserAdmin(User user);
+
     UserResponse register(UserRequest userRegisterRequest);
 }

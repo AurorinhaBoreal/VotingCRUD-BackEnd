@@ -1,7 +1,6 @@
 package com.db.crud.voting.service.impl;
 
 import java.util.Optional;
-import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
@@ -9,9 +8,10 @@ import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
 import com.db.crud.voting.enums.Operation;
+import com.db.crud.voting.enums.UserType;
+import com.db.crud.voting.exception.AuthorizationException;
 import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
-import com.db.crud.voting.mapper.LogMapper;
 import com.db.crud.voting.mapper.UserMapper;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.UserRepository;
@@ -29,7 +29,6 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     LogService logService;
     UserMapper userMapper;
-    LogMapper logMapper;
 
     @Override
     public UserResponse register(UserRequest userRegisterDto) {
@@ -41,7 +40,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userRegistered);
         log.info("User Created!");
 
-        LogObj logObj = buildObj("User", userRegistered.getId(), userRegistered.getFullname(), Operation.CREATE, userRegistered.getCreatedOn());
+        LogObj logObj = logService.buildObj("User", userRegistered.getId(), userRegistered.getFullname(), Operation.CREATE, userRegistered.getCreatedOn());
         logService.addLog(logObj);
         log.info("Log Entity Created!");
         
@@ -68,7 +67,10 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    private LogObj buildObj(String type, Long id, String name, Operation operation, LocalDateTime realizedOn) {
-        return logMapper.logObj(type, id, name, operation, realizedOn);
+    @Override
+    public void authenticateUserAdmin(User user) {
+        if (user.getUserType() != UserType.ADMIN) {
+            throw new AuthorizationException("You don't have authorization to create a agenda!");
+        }
     }
 }

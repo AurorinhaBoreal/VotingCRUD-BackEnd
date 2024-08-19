@@ -16,16 +16,13 @@ import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.response.VoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Operation;
-import com.db.crud.voting.enums.UserType;
 import com.db.crud.voting.enums.Vote;
 import com.db.crud.voting.exception.AgendaEndedException;
-import com.db.crud.voting.exception.AuthorizationException;
 import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.exception.UserAlreadyVotedException;
 import com.db.crud.voting.exception.VoteConflictException;
 import com.db.crud.voting.mapper.AgendaMapper;
-import com.db.crud.voting.mapper.LogMapper;
 import com.db.crud.voting.mapper.VoteMapper;
 import com.db.crud.voting.model.Agenda;
 import com.db.crud.voting.model.User;
@@ -49,7 +46,6 @@ public class AgendaServiceImpl implements AgendaService {
     LogService logService;
     AgendaMapper agendaMapper;
     VoteMapper voteMapper;
-    LogMapper logMapper;
     
     @Scheduled(fixedDelay = 120000)
     public void finishAgenda() {
@@ -81,9 +77,8 @@ public class AgendaServiceImpl implements AgendaService {
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
         log.debug("Requested Create Agenda: ", agendaRequest);
         User user = findUser(agendaRequest.cpf());
-        authenticateUserAdmin(user);
         log.info("Admin User Authenticated");
-
+        authenticateUserAdmin(user);
         Optional<Agenda> agenda = agendaRepository.findByQuestion(agendaRequest.question());
         verifyAgendaPresent(agenda);
 
@@ -92,7 +87,7 @@ public class AgendaServiceImpl implements AgendaService {
         agendaRepository.save(agendaCreated);
         log.info("Agenda created!");
 
-        LogObj logObj = buildObj("Agenda", agendaCreated.getId(), agendaCreated.getQuestion(), Operation.CREATE, agendaCreated.getCreatedOn());
+        LogObj logObj = logService.buildObj("Agenda", agendaCreated.getId(), agendaCreated.getQuestion(), Operation.CREATE, agendaCreated.getCreatedOn());
         logService.addLog(logObj);
         log.info("Log Entity Created!");
 
@@ -100,9 +95,7 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     private void authenticateUserAdmin(User user) {
-        if (user.getUserType() != UserType.ADMIN) {
-            throw new AuthorizationException("You don't have authorization to create a agenda!");
-        }
+        userService.authenticateUserAdmin(user);
     }
 
     private User findUser(String cpf) {
@@ -133,7 +126,7 @@ public class AgendaServiceImpl implements AgendaService {
         agenda.setTotalVotes(agenda.getNoVotes()+agenda.getYesVotes());
         agendaRepository.save(agenda);
         
-        LogObj logObj = buildObj("User", user.getId(), user.getFullname(), Operation.VOTE, LocalDateTime.now());
+        LogObj logObj = logService.buildObj("User", user.getId(), user.getFullname(), Operation.VOTE, LocalDateTime.now());
         logService.addLog(logObj);
         log.info("Log Entity Created!");
         
@@ -173,9 +166,5 @@ public class AgendaServiceImpl implements AgendaService {
 
     private LocalDateTime getFinishDate(Integer duration) {
         return (LocalDateTime.now().plusMinutes(duration)).truncatedTo(ChronoUnit.SECONDS);
-    }
-
-    private LogObj buildObj(String type, Long id, String question, Operation operation, LocalDateTime realizedOn) {
-        return logMapper.logObj(type, id, question, operation, realizedOn);
     }
 }
