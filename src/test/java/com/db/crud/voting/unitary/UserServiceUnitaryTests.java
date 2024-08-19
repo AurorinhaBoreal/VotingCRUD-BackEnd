@@ -17,6 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
+import com.db.crud.voting.enums.UserType;
+import com.db.crud.voting.exception.AuthorizationException;
 import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.fixture.UserFixture;
@@ -96,5 +98,16 @@ class UserServiceUnitaryTests {
         });
         
         assertEquals("The user with cpf: "+cpf+" isn't registered!", thrown.getMessage());
+    }
+
+    @Test
+    @DisplayName("Sad Test: Should thrown AuthorizationException")
+    void thrownAuthorizationException() {
+        userEntityValid.setUserType(UserType.COMMON);
+        AuthorizationException thrown = assertThrows(AuthorizationException.class, () -> {
+            userService.authenticateUserAdmin(userEntityValid);
+        });
+        
+        assertEquals("You don't have authorization to create a agenda!", thrown.getMessage());
     }
 }

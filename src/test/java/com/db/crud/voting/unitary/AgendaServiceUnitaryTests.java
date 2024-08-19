@@ -24,8 +24,6 @@ import com.db.crud.voting.dto.request.LogObj;
 import com.db.crud.voting.dto.response.VoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Operation;
-import com.db.crud.voting.enums.UserType;
-import com.db.crud.voting.exception.AuthorizationException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.exception.UserAlreadyVotedException;
 import com.db.crud.voting.fixture.AgendaFixture;
@@ -93,7 +91,7 @@ class AgendaServiceUnitaryTests {
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.empty());
         when(agendaMapper.dtoToAgenda(agendaDTOValid, finishOn)).thenReturn(agendaEntityValid);
         when(agendaMapper.agendaToDto(agendaEntityValid)).thenReturn(agendaResponseValid);
-        when(logMapper.logObj("Agenda", agendaEntityValid.getId(), agendaEntityValid.getQuestion(), Operation.CREATE, agendaEntityValid.getCreatedOn())).thenReturn(logObjValid);
+        when(logService.buildObj("Agenda", agendaEntityValid.getId(), agendaEntityValid.getQuestion(), Operation.CREATE, agendaEntityValid.getCreatedOn())).thenReturn(logObjValid);
         
         AgendaResponse agenda = agendaService.createAgenda(agendaDTOValid);
 
@@ -137,18 +135,6 @@ class AgendaServiceUnitaryTests {
     }
 
     @Test
-    @DisplayName("Sad Test: Should thrown AuthorizationException")
-    void thrownAuthorizationException() {
-        userEntityValid.setUserType(UserType.COMMON);
-        when(userService.getUser(anyString())).thenReturn(userEntityValid);
-        AuthorizationException thrown = assertThrows(AuthorizationException.class, () -> {
-            agendaService.createAgenda(agendaDTOValid);
-        });
-        
-        assertEquals("You don't have authorization to create a agenda!", thrown.getMessage());
-    }
-
-    @Test
     @DisplayName("Sad Test: Should Thrown EntityExistsException")
     void thrownEntityExistsException() {
         when(userService.getUser(anyString())).thenReturn(userEntityValid);
@@ -169,10 +155,10 @@ class AgendaServiceUnitaryTests {
     
         userEntityValid.setId(4L);
         agendaService.addVote(voteDTOValid2);
-    UserAlreadyVotedException thrown = assertThrows(UserAlreadyVotedException.class, () -> {
-        agendaService.addVote(voteDTOValid2);
-    });
-    
-    assertEquals("This user already voted!", thrown.getMessage());
+        UserAlreadyVotedException thrown = assertThrows(UserAlreadyVotedException.class, () -> {
+            agendaService.addVote(voteDTOValid2);
+        });
+        
+        assertEquals("This user already voted!", thrown.getMessage());
     }
 }
