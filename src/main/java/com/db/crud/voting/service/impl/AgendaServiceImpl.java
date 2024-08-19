@@ -128,11 +128,10 @@ public class AgendaServiceImpl implements AgendaService {
         verifyUserVoted(user, usersVoted);
         usersVoted.add(user);
 
-        sortVote(addvote.vote(), agenda);
+        countVote(addvote.vote(), agenda);
 
         agenda.setTotalVotes(agenda.getNoVotes()+agenda.getYesVotes());
         agendaRepository.save(agenda);
-        log.info("Vote Contabilized!");
         
         LogObj logObj = buildObj("User", user.getId(), user.getFullname(), Operation.VOTE, LocalDateTime.now());
         logService.addLog(logObj);
@@ -153,7 +152,7 @@ public class AgendaServiceImpl implements AgendaService {
         }
     }
 
-    private void sortVote(Vote vote, Agenda agenda) {
+    private void countVote(Vote vote, Agenda agenda) {
         if (vote == Vote.YES) {
             int yVotes = agenda.getYesVotes();
             agenda.setYesVotes(yVotes+1);
@@ -163,7 +162,7 @@ public class AgendaServiceImpl implements AgendaService {
         } else {
             throw new VoteConflictException("Unknown Vote, invalidating Vote!");
         }
-        log.info("Vote Added!");
+        log.info("Vote Contabilized!");
     }
 
     private Agenda findAgenda(String question) {
