@@ -33,25 +33,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse register(UserRequest userRegisterDto) {
-        log.info("Requested Create User with Name: ", userRegisterDto.firstName());
+        log.debug("Requested Create User with Name: ", userRegisterDto.firstName());
         Optional<User> user = userRepository.findByCpf(userRegisterDto.cpf());
         verifyUserPresent(user);
-        log.debug("User didn't already exists!");
+        log.info("User didn't already exists!");
 
         User userRegistered = userMapper.dtoToUser(userRegisterDto);
         userRepository.save(userRegistered);
-        log.debug("User Created!");
+        log.info("User Created!");
 
         LogObj logObj = buildObj("User", userRegistered.getId(), userRegistered.getFullname(), Operation.CREATE, userRegistered.getCreatedOn());
         logService.addLog(logObj);
-        log.debug("Log Entity Created!");
+        log.info("Log Entity Created!");
         
         return userMapper.userToDto(userRegistered);
     }
 
     private void verifyUserPresent(Optional<User> user) {
         if (user.isPresent()) {
-            log.error("User with this cpf already exists: ", user);
             throw new EntityExistsException("A person with this cpf already exists!");
         }
     }

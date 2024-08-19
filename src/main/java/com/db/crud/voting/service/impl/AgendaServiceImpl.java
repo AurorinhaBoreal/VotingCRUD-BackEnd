@@ -54,7 +54,6 @@ public class AgendaServiceImpl implements AgendaService {
     @Scheduled(fixedDelay = 120000)
     public void finishAgenda() {
         agendaRepository.findByHasEnded(false).forEach(agenda -> {
-            log.debug("Verify if any agendas has finished...");
             LocalDateTime actualDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
             if (actualDate.isAfter(agenda.getFinishOn())) {
                 log.info("Agenda Finished: "+agenda);
@@ -80,30 +79,29 @@ public class AgendaServiceImpl implements AgendaService {
 
     @Override
     public AgendaResponse createAgenda(AgendaRequest agendaRequest) {
-        log.info("Requested Create Agenda: ", agendaRequest);
+        log.debug("Requested Create Agenda: ", agendaRequest);
         User user = findUser(agendaRequest.cpf());
         authenticateUserAdmin(user);
-        log.debug("Admin User Authenticated");
+        log.info("Admin User Authenticated");
 
         Optional<Agenda> agenda = agendaRepository.findByQuestion(agendaRequest.question());
         verifyAgendaPresent(agenda);
-        log.debug("Agenda Doesn't Exist!");
+        log.info("Agenda Doesn't Exist!");
 
         LocalDateTime agendaFinish = getFinishDate(agendaRequest.duration());
         Agenda agendaCreated = agendaMapper.dtoToAgenda(agendaRequest, agendaFinish);
         agendaRepository.save(agendaCreated);
-        log.debug("Agenda created!");
+        log.info("Agenda created!");
 
         LogObj logObj = buildObj("Agenda", agendaCreated.getId(), agendaCreated.getQuestion(), Operation.CREATE, agendaCreated.getCreatedOn());
         logService.addLog(logObj);
-        log.debug("Log Entity Created!");
+        log.info("Log Entity Created!");
 
         return agendaMapper.agendaToDto(agendaCreated);
     }
 
     private void authenticateUserAdmin(User user) {
         if (user.getUserType() != UserType.ADMIN) {
-            log.error("User not Authenticated: "+user);
             throw new AuthorizationException("You don't have authorization to create a agenda!");
         }
     }
@@ -114,7 +112,6 @@ public class AgendaServiceImpl implements AgendaService {
 
     private void verifyAgendaPresent(Optional<Agenda> agenda) {
         if (agenda.isPresent()) {
-            log.error("Agenda with the same question was already created!");
             throw new EntityExistsException("This agenda was already created!");
         }
     }
@@ -124,39 +121,37 @@ public class AgendaServiceImpl implements AgendaService {
         log.info("Requested Vote!");
         Agenda agenda = findAgenda(addvote.question());
         verifyAgendaFinished(agenda);
-        log.debug("Agenda found!");
+        log.info("Agenda found!");
 
         User user = findUser(addvote.cpf());
         List<User> usersVoted = agenda.getUsersVoted();
-        log.debug("User didn't vote in this agenda yet!");
+        log.info("User didn't vote in this agenda yet!");
 
         verifyUserVoted(user, usersVoted);
         usersVoted.add(user);
 
         sortVote(addvote.vote(), agenda);
-        log.debug("Vote Sorted!");
+        log.info("Vote Sorted!");
 
         agenda.setTotalVotes(agenda.getNoVotes()+agenda.getYesVotes());
         agendaRepository.save(agenda);
-        log.debug("Vote Contabilized!");
+        log.info("Vote Contabilized!");
         
         LogObj logObj = buildObj("User", user.getId(), user.getFullname(), Operation.VOTE, LocalDateTime.now());
         logService.addLog(logObj);
-        log.debug("Log Entity Created!");
+        log.info("Log Entity Created!");
         
         return voteMapper.voteToDto(user.getCpf());
     }
 
     private void verifyAgendaFinished(Agenda agenda) {
         if (agenda.isHasEnded()) {
-            log.error("The following agendas has already ended: ", agenda);
             throw new AgendaEndedException("This agenda already ended!");
         }
     }
 
     private void verifyUserVoted(User user, List<User> usersVoted) {
         if (usersVoted.contains(user)) {
-            log.error("This user has already voted on this agenda:", user);
             throw new UserAlreadyVotedException("This user already voted!");
         }
     }
@@ -169,7 +164,6 @@ public class AgendaServiceImpl implements AgendaService {
             int nVotes = agenda.getNoVotes();
             agenda.setNoVotes(nVotes+1);
         } else {
-            log.info("Invalid Vote!");
             throw new VoteConflictException("Unknown Vote, invalidating Vote!");
         }
         log.info("Vote Added!");
