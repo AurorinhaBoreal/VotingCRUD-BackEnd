@@ -3,11 +3,11 @@ package com.db.crud.voting.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.db.crud.voting.dto.request.AddVoteRequest;
+import com.db.crud.voting.dto.request.VoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
-import com.db.crud.voting.dto.response.AddVoteResponse;
+import com.db.crud.voting.dto.response.VoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
-import com.db.crud.voting.service.agenda.AgendaService;
+import com.db.crud.voting.service.AgendaService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -29,44 +29,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin(origins = {"http://localhost:3000/", "http://localhost:5173/", "https://votacao-front.onrender.com"})
 public class AgendaController {
     
-    private static final String REQUEST_SUCCESSFUL = "Request Successful!";
     private final AgendaService agendaService;
 
     @GetMapping
     public ResponseEntity<List<AgendaResponse>> getEndedAgendas() {
-        log.info("Requested Get Ended Agendas!");
-        agendaService.finishAgenda();
-        var body = agendaService.getEndedAgendas();
-        return ResponseEntity.status(HttpStatus.OK).body(body);
+        return ResponseEntity.status(HttpStatus.OK).body(agendaService.getEndedAgendas());
     }
     
     @GetMapping("/active")
     public ResponseEntity<List<AgendaResponse>> getActiveAgendas() {
-        log.info("Requested Get Active Agendas!");
-        agendaService.finishAgenda();
-        var body = agendaService.getActiveAgendas();
-        log.info(REQUEST_SUCCESSFUL);
-
-        return ResponseEntity.status(HttpStatus.OK).body(body);
+        return ResponseEntity.status(HttpStatus.OK).body(agendaService.getActiveAgendas());
     }
 
     @PostMapping
     public ResponseEntity<AgendaResponse> createAgenda(@RequestBody @Valid AgendaRequest agendaRequest) {
-        log.info("Requested Create Agenda: ", agendaRequest);
-        var body = agendaService.createAgenda(agendaRequest);
-        log.info(REQUEST_SUCCESSFUL);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(body);
+        return ResponseEntity.status(HttpStatus.CREATED).body(agendaService.createAgenda(agendaRequest));
     }
 
     @PostMapping("/vote")
-    public ResponseEntity<AddVoteResponse> voteAgenda(@RequestBody @Valid AddVoteRequest addVoteRequest) {
-        log.info("Requested Vote!");
-        agendaService.finishAgenda();
-        var body = agendaService.addVote(addVoteRequest);
-        log.info(REQUEST_SUCCESSFUL);
-        
-        return ResponseEntity.status(HttpStatus.OK).body(body);
+    public ResponseEntity<VoteResponse> voteAgenda(@RequestBody @Valid VoteRequest addVoteRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(agendaService.addVote(addVoteRequest));
     }
 }
 

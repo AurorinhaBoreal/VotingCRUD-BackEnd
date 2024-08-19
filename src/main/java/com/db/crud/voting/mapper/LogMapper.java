@@ -1,4 +1,4 @@
-package com.db.crud.voting.dto.mapper;
+package com.db.crud.voting.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

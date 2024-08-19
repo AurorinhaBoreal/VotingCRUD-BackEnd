@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.db.crud.voting.VotingApplication;
-import com.db.crud.voting.dto.request.AddVoteRequest;
+import com.db.crud.voting.dto.request.VoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.fixture.AgendaFixture;
 import com.db.crud.voting.fixture.SqlProvider;
@@ -35,7 +35,7 @@ class AgendaControllerIT {
     ObjectMapper mapper;
 
     private AgendaRequest agendaDTORequest = AgendaFixture.AgendaDTOValid();
-    private AddVoteRequest voteDTORequest = VoteFixture.AddVote2();
+    private VoteRequest voteDTORequest = VoteFixture.AddVote2();
     private String json;
 
     @Test

@@ -3,6 +3,6 @@ package com.db.crud.voting.dto.response;
 import lombok.Builder;
 
 @Builder
-public record AddVoteResponse(
+public record VoteResponse(
     String userCpf) {
 }

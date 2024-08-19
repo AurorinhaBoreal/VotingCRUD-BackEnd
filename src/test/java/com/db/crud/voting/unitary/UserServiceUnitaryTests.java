@@ -15,16 +15,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.db.crud.voting.dto.mapper.LogMapper;
-import com.db.crud.voting.dto.mapper.UserMapper;
 import com.db.crud.voting.dto.request.UserRequest;
 import com.db.crud.voting.dto.response.UserResponse;
+import com.db.crud.voting.enums.UserType;
+import com.db.crud.voting.exception.AuthorizationException;
+import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.fixture.UserFixture;
+import com.db.crud.voting.mapper.LogMapper;
+import com.db.crud.voting.mapper.UserMapper;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.UserRepository;
-import com.db.crud.voting.service.logs.LogService;
-import com.db.crud.voting.service.user.UserServiceImpl;
+import com.db.crud.voting.service.LogService;
+import com.db.crud.voting.service.impl.UserServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceUnitaryTests {
@@ -68,7 +71,7 @@ class UserServiceUnitaryTests {
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
         when(userMapper.userToDto(userEntityValid)).thenReturn(userResponseValid);
 
-        UserResponse user = userService.getUser("05073122011");
+        UserResponse user = userService.getUserResponse("05073122011");
 
         assertNotNull(user);
     }
@@ -83,5 +86,28 @@ class UserServiceUnitaryTests {
         });
     
         assertEquals("A person with this cpf already exists!", thrown.getMessage());
+    }
+
+    @Test
+    @DisplayName("Sad Test: Should Thrown CannotFindEntityException")
+    void shouldThrownCannotFindEntityException() {
+
+        String cpf = "66754";
+        CannotFindEntityException thrown = assertThrows(CannotFindEntityException.class, () -> {
+            userService.getUser(cpf);
+        });
+        
+        assertEquals("The user with cpf: "+cpf+" isn't registered!", thrown.getMessage());
+    }
+
+    @Test
+    @DisplayName("Sad Test: Should thrown AuthorizationException")
+    void thrownAuthorizationException() {
+        userEntityValid.setUserType(UserType.COMMON);
+        AuthorizationException thrown = assertThrows(AuthorizationException.class, () -> {
+            userService.authenticateUserAdmin(userEntityValid);
+        });
+        
+        assertEquals("You don't have authorization to create a agenda!", thrown.getMessage());
     }
 }
