@@ -86,7 +86,6 @@ public class AgendaServiceImpl implements AgendaService {
 
         Optional<Agenda> agenda = agendaRepository.findByQuestion(agendaRequest.question());
         verifyAgendaPresent(agenda);
-        log.info("Agenda Doesn't Exist!");
 
         LocalDateTime agendaFinish = getFinishDate(agendaRequest.duration());
         Agenda agendaCreated = agendaMapper.dtoToAgenda(agendaRequest, agendaFinish);
@@ -125,13 +124,11 @@ public class AgendaServiceImpl implements AgendaService {
 
         User user = findUser(addvote.cpf());
         List<User> usersVoted = agenda.getUsersVoted();
-        log.info("User didn't vote in this agenda yet!");
 
         verifyUserVoted(user, usersVoted);
         usersVoted.add(user);
 
         sortVote(addvote.vote(), agenda);
-        log.info("Vote Sorted!");
 
         agenda.setTotalVotes(agenda.getNoVotes()+agenda.getYesVotes());
         agendaRepository.save(agenda);

@@ -36,7 +36,6 @@ public class UserServiceImpl implements UserService {
         log.debug("Requested Create User with Name: ", userRegisterDto.firstName());
         Optional<User> user = userRepository.findByCpf(userRegisterDto.cpf());
         verifyUserPresent(user);
-        log.info("User didn't already exists!");
 
         User userRegistered = userMapper.dtoToUser(userRegisterDto);
         userRepository.save(userRegistered);
