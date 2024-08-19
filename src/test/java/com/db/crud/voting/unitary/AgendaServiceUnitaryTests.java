@@ -18,31 +18,28 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.db.crud.voting.dto.mapper.AgendaMapper;
-import com.db.crud.voting.dto.mapper.LogMapper;
-import com.db.crud.voting.dto.mapper.VoteMapper;
-import com.db.crud.voting.dto.request.AddVoteRequest;
+import com.db.crud.voting.dto.request.VoteRequest;
 import com.db.crud.voting.dto.request.AgendaRequest;
 import com.db.crud.voting.dto.request.LogObj;
-import com.db.crud.voting.dto.response.AddVoteResponse;
+import com.db.crud.voting.dto.response.VoteResponse;
 import com.db.crud.voting.dto.response.AgendaResponse;
 import com.db.crud.voting.enums.Operation;
-import com.db.crud.voting.enums.UserType;
-import com.db.crud.voting.exception.AuthorizationException;
-import com.db.crud.voting.exception.CannotFindEntityException;
 import com.db.crud.voting.exception.EntityExistsException;
 import com.db.crud.voting.exception.UserAlreadyVotedException;
 import com.db.crud.voting.fixture.AgendaFixture;
 import com.db.crud.voting.fixture.LogFixture;
 import com.db.crud.voting.fixture.UserFixture;
 import com.db.crud.voting.fixture.VoteFixture;
+import com.db.crud.voting.mapper.AgendaMapper;
+import com.db.crud.voting.mapper.LogMapper;
+import com.db.crud.voting.mapper.VoteMapper;
 import com.db.crud.voting.model.Agenda;
 import com.db.crud.voting.model.User;
 import com.db.crud.voting.repository.AgendaRepository;
 import com.db.crud.voting.repository.UserRepository;
-import com.db.crud.voting.service.agenda.AgendaServiceImpl;
-import com.db.crud.voting.service.logs.LogService;
-import com.db.crud.voting.service.user.UserServiceImpl;
+import com.db.crud.voting.service.impl.AgendaServiceImpl;
+import com.db.crud.voting.service.LogService;
+import com.db.crud.voting.service.impl.UserServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class AgendaServiceUnitaryTests {
@@ -77,9 +74,9 @@ class AgendaServiceUnitaryTests {
 
     User userEntityValid = UserFixture.UserEntityValid();
 
-    AddVoteRequest voteDTOValid1 = VoteFixture.AddVote1();
-    AddVoteRequest voteDTOValid2 = VoteFixture.AddVote2();
-    AddVoteResponse voteResponseValid = VoteFixture.AddVoteResponse();
+    VoteRequest voteDTOValid1 = VoteFixture.AddVote1();
+    VoteRequest voteDTOValid2 = VoteFixture.AddVote2();
+    VoteResponse voteResponseValid = VoteFixture.AddVoteResponse();
 
     LogObj logObjValid = LogFixture.LogObjEntityValid1();
 
@@ -90,11 +87,11 @@ class AgendaServiceUnitaryTests {
         
         agendaEntityValid.setId(2L);
 
-        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
+        when(userService.getUser(anyString())).thenReturn(userEntityValid);
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.empty());
         when(agendaMapper.dtoToAgenda(agendaDTOValid, finishOn)).thenReturn(agendaEntityValid);
         when(agendaMapper.agendaToDto(agendaEntityValid)).thenReturn(agendaResponseValid);
-        when(logMapper.logObj("Agenda", agendaEntityValid.getId(), agendaEntityValid.getQuestion(), Operation.CREATE, agendaEntityValid.getCreatedOn())).thenReturn(logObjValid);
+        when(logService.buildObj("Agenda", agendaEntityValid.getId(), agendaEntityValid.getQuestion(), Operation.CREATE, agendaEntityValid.getCreatedOn())).thenReturn(logObjValid);
         
         AgendaResponse agenda = agendaService.createAgenda(agendaDTOValid);
 
@@ -104,7 +101,7 @@ class AgendaServiceUnitaryTests {
     @Test
     @DisplayName("Happy Test: Add Yes Vote")
     void shouldAddYesVote() {
-        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
+        when(userService.getUser(anyString())).thenReturn(userEntityValid);
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.of(agendaEntityValid));
         when(voteMapper.voteToDto(userEntityValid.getCpf())).thenReturn(voteResponseValid);
     
@@ -117,7 +114,7 @@ class AgendaServiceUnitaryTests {
     @Test
     @DisplayName("Happy Test: Add No Vote")
     void shouldAddNoVote() {
-        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
+        when(userService.getUser(anyString())).thenReturn(userEntityValid);
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.of(agendaEntityValid));
     
         userEntityValid.setId(4L);
@@ -138,31 +135,9 @@ class AgendaServiceUnitaryTests {
     }
 
     @Test
-    @DisplayName("Sad Test: Should Thrown CannotFindEntityException")
-        void shouldThrownCannotFindEntityException() {
-    CannotFindEntityException thrown = assertThrows(CannotFindEntityException.class, () -> {
-        agendaService.createAgenda(agendaDTOValid);
-    });
-    
-    assertEquals("The user with cpf: "+agendaDTOValid.cpf()+" isn't registered!", thrown.getMessage());
-    }
-
-    @Test
-    @DisplayName("Sad Test: Should thrown AuthorizationException")
-    void thrownAuthorizationException() {
-        userEntityValid.setUserType(UserType.COMMON);
-        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
-    AuthorizationException thrown = assertThrows(AuthorizationException.class, () -> {
-        agendaService.createAgenda(agendaDTOValid);
-    });
-    
-    assertEquals("You don't have authorization to create a agenda!", thrown.getMessage());
-    }
-
-    @Test
     @DisplayName("Sad Test: Should Thrown EntityExistsException")
     void thrownEntityExistsException() {
-        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
+        when(userService.getUser(anyString())).thenReturn(userEntityValid);
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.of(agendaEntityValid));
         
     EntityExistsException thrown = assertThrows(EntityExistsException.class, () -> {
@@ -175,15 +150,15 @@ class AgendaServiceUnitaryTests {
     @Test
     @DisplayName("Sad Test: Should Thrown UserALreadyVotedException")
     void thrownUserAlreadyVotedException() {
-        when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(userEntityValid));
+        when(userService.getUser(anyString())).thenReturn(userEntityValid);
         when(agendaRepository.findByQuestion(anyString())).thenReturn(Optional.of(agendaEntityValid));
     
         userEntityValid.setId(4L);
         agendaService.addVote(voteDTOValid2);
-    UserAlreadyVotedException thrown = assertThrows(UserAlreadyVotedException.class, () -> {
-        agendaService.addVote(voteDTOValid2);
-    });
-    
-    assertEquals("This user already voted!", thrown.getMessage());
+        UserAlreadyVotedException thrown = assertThrows(UserAlreadyVotedException.class, () -> {
+            agendaService.addVote(voteDTOValid2);
+        });
+        
+        assertEquals("This user already voted!", thrown.getMessage());
     }
 }

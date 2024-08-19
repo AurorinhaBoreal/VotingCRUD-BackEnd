@@ -24,6 +24,7 @@ public class ErrorHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleErrorHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        log.error("ERROR POPULATING FIELD!", e.getMessage());
         return ResponseEntity.badRequest().body("The code informed for the enum isn't valid!");
     }
 
