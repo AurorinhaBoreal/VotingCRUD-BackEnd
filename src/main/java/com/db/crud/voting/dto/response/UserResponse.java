@@ -8,5 +8,6 @@ import lombok.Builder;
 public record UserResponse(
         UserType userType,
         String firstName,
-        String surname) {
+        String surname,
+        String cpf) {
 }

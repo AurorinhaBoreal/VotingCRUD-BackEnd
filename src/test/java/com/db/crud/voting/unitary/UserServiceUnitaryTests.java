@@ -60,7 +60,6 @@ class UserServiceUnitaryTests {
         userEntityValid.setId(1L);
 
         UserResponse userResponse = userService.register(userDTOValid);
-        System.out.println(userResponse);
         assertNotNull(userResponse);
         assertEquals("Aurora", userResponse.firstName() );
     }

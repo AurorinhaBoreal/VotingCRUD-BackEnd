@@ -1,5 +1,6 @@
 package com.db.crud.voting.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -68,9 +69,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserResponse> getUsers() {
+        return userRepository.findAll()
+            .stream().map(user -> userMapper.userToDto(user)).toList();
+    }
+
+    @Override
     public void authenticateUserAdmin(User user) {
         if (user.getUserType() != UserType.ADMIN) {
             throw new AuthorizationException("You don't have authorization to create a agenda!");
         }
+    }
+
+    @Override
+    public void allowAccess(String cpf) {
+        User user = getUser(cpf);
+        if (user.getUserType() != UserType.ADMIN) {
+            throw new AuthorizationException("The User isn't allowed to access this information!");
+        }
+    }
+
+    @Override 
+    public void removeUser(String cpf) {
+        User user = getUser(cpf);
+        userRepository.delete(user);
     }
 }
