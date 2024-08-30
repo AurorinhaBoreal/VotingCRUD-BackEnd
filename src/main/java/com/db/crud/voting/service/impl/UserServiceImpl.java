@@ -88,4 +88,10 @@ public class UserServiceImpl implements UserService {
             throw new AuthorizationException("The User isn't allowed to acess this information!");
         }
     }
+
+    @Override 
+    public void removeUser(String cpf) {
+        User user = getUser(cpf);
+        userRepository.delete(user);
+    }
 }

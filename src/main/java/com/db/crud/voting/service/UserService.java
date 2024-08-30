@@ -19,4 +19,6 @@ public interface UserService {
     void allowAccess(String cpf);
 
     List<UserResponse> getUsers();
+
+    void removeUser(String cpf);
 }

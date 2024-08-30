@@ -16,6 +16,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,8 +48,14 @@ public class UserController {
     }
     
     @PostMapping("/validate")
-    public ResponseEntity<Void> allowAccess(@RequestBody String cpf) {
+    public ResponseEntity<Void> allowAccess(@RequestBody @Valid String cpf) {
         userService.allowAccess(cpf);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> removeAgenda(@RequestBody @Valid String question) {
+        userService.removeUser(question);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
