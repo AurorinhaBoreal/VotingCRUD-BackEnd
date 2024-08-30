@@ -18,9 +18,13 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @Slf4j
 @RestController
@@ -49,6 +53,18 @@ public class AgendaController {
     @PostMapping("/vote")
     public ResponseEntity<VoteResponse> voteAgenda(@RequestBody @Valid VoteRequest addVoteRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(agendaService.addVote(addVoteRequest));
+    }
+
+    @PutMapping("/end/{question}")
+    public ResponseEntity<Void> endAgendaEarly(@PathVariable("question") String question) {        
+        agendaService.endAgendaEarly(question);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{question}")
+    public ResponseEntity<Void> removeAgenda(@PathVariable("question") String question) {
+        agendaService.removeAgenda(question);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
 

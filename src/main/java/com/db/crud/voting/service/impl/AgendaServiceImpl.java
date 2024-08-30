@@ -50,12 +50,7 @@ public class AgendaServiceImpl implements AgendaService {
     @Scheduled(fixedDelay = 120000)
     public void finishAgenda() {
         agendaRepository.findByHasEnded(false).forEach(agenda -> {
-            LocalDateTime actualDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-            if (actualDate.isAfter(agenda.getFinishOn())) {
-                log.info("Agenda Finished: "+agenda);
-                agendaRepository.finishAgenda(agenda.getId());
-                agendaRepository.save(agenda);
-            }
+            updateAgendaStatus(agenda);
         });
     }
 
@@ -131,6 +126,27 @@ public class AgendaServiceImpl implements AgendaService {
         log.info("Log Entity Created!");
         
         return voteMapper.voteToDto(user.getCpf());
+    }
+
+    @Override
+    public void endAgendaEarly(String question) {
+        Agenda agenda = findAgenda(question);
+        updateAgendaStatus(agenda);
+    }
+
+    private void updateAgendaStatus(Agenda agenda) {
+        LocalDateTime actualDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        if (actualDate.isAfter(agenda.getFinishOn())) {
+            log.info("Agenda Finished: "+agenda);
+            agendaRepository.finishAgenda(agenda.getId());
+            agendaRepository.save(agenda);
+        }
+    }
+
+    @Override
+    public void removeAgenda(String question) {
+        Agenda agenda = findAgenda(question);
+        agendaRepository.delete(agenda);
     }
 
     private void verifyAgendaFinished(Agenda agenda) {
