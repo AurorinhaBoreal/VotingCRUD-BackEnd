@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -53,9 +54,9 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> removeAgenda(@RequestBody @Valid String question) {
-        userService.removeUser(question);
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<Void> removeUser(@PathVariable("cpf") String cpf) {
+        userService.removeUser(cpf);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

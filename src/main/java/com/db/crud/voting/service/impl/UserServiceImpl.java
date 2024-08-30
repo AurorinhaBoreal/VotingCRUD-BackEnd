@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
     public void allowAccess(String cpf) {
         User user = getUser(cpf);
         if (user.getUserType() != UserType.ADMIN) {
-            throw new AuthorizationException("The User isn't allowed to acess this information!");
+            throw new AuthorizationException("The User isn't allowed to access this information!");
         }
     }
 

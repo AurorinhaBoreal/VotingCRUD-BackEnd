@@ -31,6 +31,7 @@ import com.db.crud.voting.service.AgendaService;
 import com.db.crud.voting.service.LogService;
 import com.db.crud.voting.service.UserService;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,10 +48,15 @@ public class AgendaServiceImpl implements AgendaService {
     AgendaMapper agendaMapper;
     VoteMapper voteMapper;
     
+    @Transactional
     @Scheduled(fixedDelay = 120000)
     public void finishAgenda() {
         agendaRepository.findByHasEnded(false).forEach(agenda -> {
-            updateAgendaStatus(agenda);
+        LocalDateTime actualDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        if (actualDate.isAfter(agenda.getFinishOn())) {
+            agendaRepository.finishAgenda(agenda.getId());
+            agendaRepository.save(agenda);
+        }
         });
     }
 
@@ -128,23 +134,22 @@ public class AgendaServiceImpl implements AgendaService {
         return voteMapper.voteToDto(user.getCpf());
     }
 
+    @Transactional
     @Override
     public void endAgendaEarly(String question) {
+        question = question+"?";
         Agenda agenda = findAgenda(question);
-        updateAgendaStatus(agenda);
+        endAgenda(agenda);
     }
 
-    private void updateAgendaStatus(Agenda agenda) {
-        LocalDateTime actualDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        if (actualDate.isAfter(agenda.getFinishOn())) {
-            log.info("Agenda Finished: "+agenda);
-            agendaRepository.finishAgenda(agenda.getId());
-            agendaRepository.save(agenda);
-        }
+    @Transactional
+    private void endAgenda(Agenda agenda) {
+        agendaRepository.finishAgenda(agenda.getId());
     }
 
     @Override
     public void removeAgenda(String question) {
+        question = question+"?";
         Agenda agenda = findAgenda(question);
         agendaRepository.delete(agenda);
     }
