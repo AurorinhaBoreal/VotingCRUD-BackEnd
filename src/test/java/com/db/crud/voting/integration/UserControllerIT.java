@@ -46,7 +46,7 @@ class UserControllerIT {
 
         json = "33092209079";
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/user")
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/specific")
             .contentType(MediaType.APPLICATION_JSON)
             .content(json))
             .andExpect(status().isOk())

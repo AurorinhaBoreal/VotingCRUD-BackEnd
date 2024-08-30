@@ -13,6 +13,7 @@ public interface UserMapper {
     @Mapping(source = "userType", target = "userType")
     @Mapping(source = "firstName", target = "firstName")
     @Mapping(source = "surname", target = "surname")
+    @Mapping(source = "cpf", target = "cpf")
     UserResponse userToDto(User user);
 
     @Mapping(target = "id", ignore = true)
